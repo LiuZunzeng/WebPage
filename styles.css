@@ -37,7 +37,7 @@ body {
 .sidebar a {
     color: white;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .sidebar a:hover {
@@ -82,4 +82,23 @@ main a:hover {
     .sidebar {
         width: 100%;
     }
+}
+
+/* 子菜单样式 */
+.submenu {
+    margin-left: 20px; /* 子菜单缩进 20px */
+    display: none; /* 默认隐藏 */
+}
+
+.submenu li {
+    margin: 10px 0; /* 子菜单项间距稍小 */
+}
+
+.submenu a {
+    font-size: 14px; /* 子菜单链接字体稍小 */
+}
+
+/* 子菜单显示时的样式 */
+.submenu.active {
+    display: block; /* 点击父项后显示 */
 }
