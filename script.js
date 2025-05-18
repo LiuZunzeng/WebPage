@@ -1,15 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('.section-link');
-    const sections = document.querySelectorAll('.section');
-
+document.getElementById('search').addEventListener('input', function(e) {
+    const searchText = e.target.value.toLowerCase();
+    const links = document.querySelectorAll('.sidebar a');
     links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sectionId = this.getAttribute('data-section');
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(sectionId).style.display = 'block';
-        });
+        const text = link.textContent.toLowerCase();
+        link.parentElement.style.display = text.includes(searchText) ? 'block' : 'none';
     });
 });
