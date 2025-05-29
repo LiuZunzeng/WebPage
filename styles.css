@@ -79,6 +79,41 @@ main a:hover {
     text-decoration: underline;
 }
 
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse; /* 合并边框 */
+    margin-bottom: 20px;
+    background-color: #ffffff; /* 白色背景 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+}
+
+th, td {
+    padding: 12px 15px; /* 增加内边距 */
+    text-align: left; /* 左对齐 */
+    border-bottom: 1px solid #ddd; /* 柔和的底边框 */
+}
+
+th {
+    background-color: #f8f9fa; /* 表头背景色 */
+    font-weight: bold; /* 表头加粗 */
+    color: #333; /* 深灰色文字 */
+}
+
+td {
+    color: #555; /* 单元格文字颜色 */
+}
+
+tr:hover {
+    background-color: #f1f3f5; /* 悬停时高亮背景 */
+}
+
+/* 确保 MathJax 公式与表格协调 */
+.MathJax {
+    font-size: 1.1em; /* 公式字体大小 */
+    vertical-align: middle; /* 公式垂直居中 */
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .container {
