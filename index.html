@@ -79,7 +79,7 @@
                     <a href="#algorithm" class="toggle">Algorithm</a>
                     <ul class="submenu">
                         <li><a href="#split-strategy">Split Strategy</a></li>
-                        <li><a href="#improved-hybrid-ga">Improved HGA</a></li>
+                        <li><a href="#improved-hybrid-ga">Schedule Strategy</a></li>
                     </ul>
                 </li>
                 <li>
@@ -224,8 +224,13 @@
 返回子订单集合
                 </code></pre>
             </div>
-            <h2 id="improved-hybrid-ga">Improved HGA</h2>
-            <p>[Content for Improved Hybrid Genetic Algorithm goes here]</p>
+            <h2 id="improved-hybrid-ga">Schedule Strategy</h2>
+            <p>调度策略包括以下关键步骤：</p>
+            <ol>
+                <li>对整车子订单（重量或体积很接近车辆的容量上限的子订单）单独排线，以优化车辆使用效率。</li>
+                <li>对 pyvrp 的源码进行改动，添加多维度容量约束，使算法能够同时考虑车辆对订单体积和订单重量的限制。</li>
+                <li>在进入 pyvrp 之前，检查所有订单在时间维度上的可行性，若发现不可行订单，则不进入 pyvrp。</li>
+            </ol>
 
             <h1 id="io-interface">Input/Output Interface</h1>
             <h2 id="input-parameters">输入参数（快速入门示例）</h2>
