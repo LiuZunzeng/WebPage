@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <style>
         /* Styles for collapsible JSON */
         details {
@@ -43,6 +46,7 @@
         .json-null { color: #808080; /* gray */ }
     </style>
 </head>
+
 <body>
     <div class="container">
         <nav class="sidebar">
@@ -186,197 +190,251 @@
             <p>[Content for Improved Hybrid Genetic Algorithm goes here]</p>
 
             <h1 id="io-interface">Input/Output Interface</h1>
-            <h2 id="input-parameters">Input Parameters (Quick Start Example)</h2>
-            <details>
-                <summary>JSON Input Structure { ... }</summary>
-                <pre><code>
+            <h2 id="input-parameters">输入参数（快速入门示例）</h2>
+            <div class="json-container">
+                <div class="json-header">
+                    <span class="json-toggle">JSON 输入结构</span>
+                    <button class="toggle-btn" data-target="input-json">−</button>
+                </div>
+                <div class="json-content" id="input-json">
+                    <pre><code class="language-json">
 {
-  <span class="json-key">"dispatchId"</span>: <span class="json-string">"DIS0001"</span>,
-  <span class="json-key">"config"</span>: <details open><summary>{ ... } (<span class="json-key">config</span>)</summary><pre><code>{
-  <span class="json-key">"DELIVERY_LOADING_SPEED"</span>: <span class="json-number">2.0</span>,
-  <span class="json-key">"DELIVERY_STAY_MINUTE"</span>: <span class="json-number">5</span>,
-  <span class="json-key">"ROS_VEHICLE_SPEED"</span>: <span class="json-number">50</span>,
-  <span class="json-key">"ROS_SPLIT_ORDER"</span>: <span class="json-string">"Y"</span>,
-  <span class="json-key">"ROS_NORMAL_TEMPERATURE_RATIO"</span>: <span class="json-number">0.90</span>
-}</code></pre></details>,
-  <span class="json-key">"depots"</span>: <details open><summary>[ ... ] (<span class="json-key">depots</span>)</summary><pre><code>[
-    <details open><summary>{ ... } (depot 1)</summary><pre><code>{
-      <span class="json-key">"branchId"</span>: <span class="json-string">"WH01"</span>,
-      <span class="json-key">"branchDescr"</span>: <span class="json-string">"张江物流中心"</span>,
-      <span class="json-key">"longitude"</span>: <span class="json-string">"121.50389"</span>,
-      <span class="json-key">"latitude"</span>: <span class="json-string">"31.29665"</span>,
-      <span class="json-key">"notes"</span>: <span class="json-string">"说明"</span>,
-      <span class="json-key">"branch_status"</span>: <span class="json-string">"0"</span>
-    }</code></pre></details>
-  ]</code></pre></details>,
-  <span class="json-key">"dispatchZone"</span>: <details open><summary>[ ... ] (<span class="json-key">dispatchZone</span>)</summary><pre><code>[
-    <details open><summary>{ ... } (dispatchZone 1)</summary><pre><code>{
-      <span class="json-key">"dispatchZoneCode"</span>: <span class="json-string">"DISZONE001"</span>,
-      <span class="json-key">"departureWave"</span>: <span class="json-string">"0:00-1:00,2:00-4:00"</span>,
-      <span class="json-key">"longitude"</span>: <span class="json-string">"121.50389"</span>,
-      <span class="json-key">"latitude"</span>: <span class="json-string">"31.29665"</span>,
-      <span class="json-key">"vehicleType"</span>: <details open><summary>[ ... ] (<span class="json-key">vehicleType</span>)</summary><pre><code>[
-        <details open><summary>{ ... } (vehicleType 1)</summary><pre><code>{
-          <span class="json-key">"vehicleTypeId"</span>: <span class="json-string">"Type1"</span>,
-          <span class="json-key">"vehicleTypeDescr1"</span>: <span class="json-string">"9.6米车型"</span>,
-          <span class="json-key">"loadCapacityMin"</span>: <span class="json-number">10.0</span>,
-          <span class="json-key">"LoadCapacity"</span>: <span class="json-number">16.0</span>,
-          <span class="json-key">"capacity"</span>: <span class="json-number">40.0</span>,
-          <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>
-        }</code></pre></details>
-      ]</code></pre></details>,
-      <span class="json-key">"vehicle"</span>: <details open><summary>[ ... ] (<span class="json-key">vehicle</span>)</summary><pre><code>[
-        <details open><summary>{ ... } (vehicle 1)</summary><pre><code>{
-          <span class="json-key">"vehicleId"</span>: <span class="json-string">"VE0000000215"</span>,
-          <span class="json-key">"LicensePlateNo"</span>: <span class="json-string">"沪A88888"</span>,
-          <span class="json-key">"vehicleType"</span>: <span class="json-string">"Type1"</span>,
-          <span class="json-key">"pri"</span>: <span class="json-number">1</span>,
-          <span class="json-key">"capacityLength"</span>: <span class="json-number">9.6</span>,
-          <span class="json-key">"capacityWidth"</span>: <span class="json-number">2.3</span>,
-          <span class="json-key">"capacityHeight"</span>: <span class="json-number">2.3</span>,
-          <span class="json-key">"maxVolume"</span>: <span class="json-number">40.0</span>,
-          <span class="json-key">"maxWeight"</span>: <span class="json-number">16.0</span>,
-          <span class="json-key">"maxQty"</span>: <span class="json-number">100</span>,
-          <span class="json-key">"maxMoney"</span>: <span class="json-number">100.0</span>,
-          <span class="json-key">"mileageCost"</span>: <span class="json-null">null</span>, <span class="json-comment">// Assuming null or to be filled, PDF shows empty</span>
-          <span class="json-key">"workingTime"</span>: <span class="json-string">"06:00-17:00"</span>,
-          <span class="json-key">"returnFlag"</span>: <span class="json-string">"0"</span>
-        }</code></pre></details>
-      ]</code></pre></details>,
-      <span class="json-key">"tariff"</span>: <details open><summary>[ ... ] (<span class="json-key">tariff</span>)</summary><pre><code>[
-        <details open><summary>{ ... } (tariff 1)</summary><pre><code>{
-          <span class="json-key">"tariffID"</span>: <span class="json-string">"JLB-JT-202410-00098"</span>,
-          <span class="json-key">"offeringType"</span>: <span class="json-string">"整车运输"</span>,
-          <span class="json-key">"shipperProvince"</span>: <span class="json-string">"河北"</span>,
-          <span class="json-key">"shipperCity"</span>: <span class="json-string">"石家庄"</span>,
-          <span class="json-key">"shipperDistrict"</span>: <span class="json-string">""</span>,
-          <span class="json-key">"consigneeProvince"</span>: <span class="json-string">"山东"</span>,
-          <span class="json-key">"consigneeCity"</span>: <span class="json-string">"济南"</span>,
-          <span class="json-key">"consigneeDistrict"</span>: <span class="json-string">""</span>,
-          <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>,
-          <span class="json-key">"mileage"</span>: <span class="json-number">399.0</span>,
-          <span class="json-key">"rateBase"</span>: <span class="json-string">"吨公里"</span>,
-          <span class="json-key">"initialRate"</span>: <span class="json-number">0.650</span>
-        }</code></pre></details>
-      ]</code></pre></details>
-    }</code></pre></details>
-  ]</code></pre></details>,
-  <span class="json-key">"orders"</span>: <details open><summary>[ ... ] (<span class="json-key">orders</span>)</summary><pre><code>[
-    <details open><summary>{ ... } (order 1)</summary><pre><code>{
-      <span class="json-key">"dispatchZoneCode"</span>: <span class="json-string">"DIS0001"</span>, <span class="json-comment">// Note: PDF example "DIS0001", likely should match a dispatchZoneCode like "DISZONE001"</span>
-      <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
-      <span class="json-key">"orderNo"</span>: <span class="json-string">"P0001"</span>,
-      <span class="json-key">"DC"</span>: <span class="json-string">"WH01"</span>,
-      <span class="json-key">"orderType"</span>: <span class="json-string">"D"</span>,
-      <span class="json-key">"createTime"</span>: <span class="json-string">"2025-03-04 10:00:00"</span>,
-      <span class="json-key">"qty"</span>: <span class="json-number">10</span>,
-      <span class="json-key">"weight"</span>: <span class="json-number">15.5</span>,
-      <span class="json-key">"cubic"</span>: <span class="json-number">42.7</span>,
-      <span class="json-key">"money"</span>: <span class="json-number">100.0</span>,
-      <span class="json-key">"bulkFlag"</span>: <span class="json-number">1</span>,
-      <span class="json-key">"routeNo"</span>: <span class="json-string">""</span>,
-      <span class="json-key">"routeNoNext"</span>: <span class="json-string">""</span>,
-      <span class="json-key">"offeringType"</span>: <span class="json-string">"汽运"</span>,
-      <span class="json-key">"temperatureClass"</span>: <span class="json-string">"冷藏"</span>,
-      <span class="json-key">"addressNo"</span>: <span class="json-string">"ADDR001"</span>,
-      <span class="json-key">"address"</span>: <span class="json-string">"上海市杨浦区邯郸路某某号"</span>,
-      <span class="json-key">"timeWindowFrom"</span>: <span class="json-string">"00:00"</span>, <span class="json-comment">// PDF shows 00:00, assuming string</span>
-      <span class="json-key">"timeWindowTo"</span>: <span class="json-string">"23:59"</span>,   <span class="json-comment">// PDF shows 23:59, assuming string</span>
-      <span class="json-key">"vehicleCategory"</span>: <span class="json-string">"type1, type2"</span>,
-      <span class="json-key">"longitude"</span>: <span class="json-string">"121.50389"</span>,
-      <span class="json-key">"latitude"</span>: <span class="json-string">"31.29665"</span>,
-      <span class="json-key">"consigneeId"</span>: <span class="json-string">"A001"</span>,
-      <span class="json-key">"companyClass"</span>: <span class="json-string">"0点"</span>,
-      <span class="json-key">"availableVehicleType"</span>: <span class="json-string">"type1, type2"</span>,
-      <span class="json-key">"vehicleCategoryCus"</span>: <span class="json-string">"type1, type2"</span>,
-      <span class="json-key">"unloadingTimeWindow"</span>: <span class="json-string">"8:00-12:00, 14:00-18:00"</span>,
-      <span class="json-key">"nonUnloadingTimeWindow"</span>: <span class="json-string">"12:00-14:00,18:00-24:00"</span>,
-      <span class="json-key">"leadTime"</span>: <span class="json-number">36.0</span>,
-      <span class="json-key">"SDD"</span>: <span class="json-string">"1, 2, 3"</span>,
-      <span class="json-key">"ordersDetails"</span>: <details open><summary>[ ... ] (<span class="json-key">ordersDetails</span>)</summary><pre><code>[
-        <details open><summary>{ ... } (orderDetail 1)</summary><pre><code>{
-          <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
-          <span class="json-key">"taskLineNo"</span>: <span class="json-string">"1"</span>,
-          <span class="json-key">"sku"</span>: <span class="json-string">"210001"</span>,
-          <span class="json-key">"skuDescr1"</span>: <span class="json-string">"老酸奶"</span>,
-          <span class="json-key">"qty"</span>: <span class="json-number">2</span>,
-          <span class="json-key">"weight"</span>: <span class="json-number">2.0</span>,
-          <span class="json-key">"cubic"</span>: <span class="json-number">6.2</span>,
-          <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>,
-          <span class="json-key">"grossWeight"</span>: <span class="json-number">1.0</span>,
-          <span class="json-key">"cube"</span>: <span class="json-number">3.1</span>
-        }</code></pre></details>
-      ]</code></pre></details>
-    }</code></pre></details>
-  ]</code></pre></details>
+  "dispatchId": "DIS0001",
+  "config": {
+    "DELIVERY_LOADING_SPEED": 2.0,
+    "DELIVERY_STAY_MINUTE": 5,
+    "ROS_VEHICLE_SPEED": 50,
+    "ROS_SPLIT_ORDER": "Y",
+    "ROS_NORMAL_TEMPERATURE_RATIO": 0.90
+  },
+  "depots": [
+    {
+      "branchId": "WH01",
+      "branchDescr": "张江物流中心",
+      "longitude": "121.50389",
+      "latitude": "31.29665",
+      "notes": "说明",
+      "branch_status": "0"
+    }
+  ],
+  "dispatchZone": [
+    {
+      "dispatchZoneCode": "DISZONE001",
+      "departureWave": "0:00-1:00,2:00-4:00",
+      "longitude": "121.50389",
+      "latitude": "31.29665",
+      "vehicleType": [
+        {
+          "vehicleTypeId": "Type1",
+          "vehicleTypeDescr1": "9.6米车型",
+          "loadCapacityMin": 10.0,
+          "LoadCapacity": 16.0,
+          "capacity": 40.0,
+          "temperatureType": "冷藏"
+        }
+      ],
+      "vehicle": [
+        {
+          "vehicleId": "VE0000000215",
+          "LicensePlateNo": "沪A88888",
+          "vehicleType": "Type1",
+          "pri": 1,
+          "capacityLength": 9.6,
+          "capacityWidth": 2.3,
+          "capacityHeight": 2.3,
+          "maxVolume": 40.0,
+          "maxWeight": 16.0,
+          "maxQty": 100,
+          "maxMoney": 100.0,
+          "mileageCost": null,
+          "workingTime": "06:00-17:00",
+          "returnFlag": "0"
+        }
+      ],
+      "tariff": [
+        {
+          "tariffID": "JLB-JT-202410-00098",
+          "offeringType": "整车运输",
+          "shipperProvince": "河北",
+          "shipperCity": "石家庄",
+          "shipperDistrict": "",
+          "consigneeProvince": "山东",
+          "conselleeCity": "济南",
+          "consigneeDistrict": "",
+          "temperatureType": "冷藏",
+          "mileage": 399.0,
+          "rateBase": "吨公里",
+          "initialRate": 0.650
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "dispatchZoneCode": "DISZONE001",
+      "taskNo": "P0001-2",
+      "orderNo": "P0001",
+      "DC": "WH01",
+      "orderType": "D",
+      "createTime": "2025-03-04 10:00:00",
+      "qty": 10,
+      "weight": 15.5,
+      "cubic": 42.7,
+      "money": 100.0,
+      "bulkFlag": 1,
+      "routeNo": "",
+      "routeNoNext": "",
+      "offeringType": "汽运",
+      "temperatureClass": "冷藏",
+      "addressNo": "ADDR001",
+      "address": "上海市杨浦区邯郸路某某号",
+      "timeWindowFrom": "00:00",
+      "timeWindowTo": "23:59",
+      "vehicleCategory": "type1, type2",
+      "longitude": "121.50389",
+      "latitude": "31.29665",
+      "consigneeId": "A001",
+      "companyClass": "0点",
+      "availableVehicleType": "type1, type2",
+      "vehicleCategoryCus": "type1, type2",
+      "unloadingTimeWindow": "8:00-12:00, 14:00-18:00",
+      "nonUnloadingTimeWindow": "12:00-14:00,18:00-24:00",
+      "leadTime": 36.0,
+      "SDD": "1, 2, 3",
+      "ordersDetails": [
+        {
+          "taskNo": "P0001-2",
+          "taskLineNo": "1",
+          "sku": "210001",
+          "skuDescr1": "老酸奶",
+          "qty": 2,
+          "weight": 2.0,
+          "cubic": 6.2,
+          "temperatureType": "冷藏",
+          "grossWeight": 1.0,
+          "cube": 3.1
+        }
+      ]
+    }
+  ]
 }
-                </code></pre>
-            </details>
+                    </code></pre>
+                </div>
+            </div>
 
-            <h2 id="output-parameters">Output Parameters (Quick Start Example)</h2>
-            <details>
-                <summary>JSON Output Structure { ... }</summary>
-                <pre><code>
+            <h2 id="output-parameters">输出参数（快速入门示例）</h2>
+            <div class="json-container">
+                <div class="json-header">
+                    <span class="json-toggle">JSON 输出结构</span>
+                    <button class="toggle-btn" data-target="output-json">−</button>
+                </div>
+                <div class="json-content" id="output-json">
+                    <pre><code class="language-json">
 {
-  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
-  <span class="json-key">"code"</span>: <span class="json-string">"10000"</span>,
-  <span class="json-key">"msg"</span>: <span class="json-string">"成功"</span>,
-  <span class="json-key">"results"</span>: <details open><summary>[ ... ] (<span class="json-key">results</span>)</summary><pre><code>[
-    <details open><summary>{ ... } (result 1)</summary><pre><code>{
-      <span class="json-key">"dispatchId"</span>: <span class="json-string">"DIS0001"</span>, <span class="json-comment">//调度编码</span>
-      <span class="json-key">"waybillNo"</span>: <span class="json-string">"BIL001"</span>, <span class="json-comment">//运单号,算法生成</span>
-      <span class="json-key">"vehicleId"</span>: <span class="json-string">"VE0000000215"</span>,
-      <span class="json-key">"vehicleType"</span>: <span class="json-string">"Type1"</span>,
-      <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>,
-      <span class="json-key">"ETD"</span>: <span class="json-string">"2025-03-04 00:00:00"</span>,
-      <span class="json-key">"vehicleLeaveSeq"</span>: <span class="json-number">1</span>,
-      <span class="json-key">"routeNoRos"</span>: <span class="json-string">"R0001"</span>,
-      <span class="json-key">"routeNameRos"</span>: <span class="json-string">"石家庄-济南-潍坊-青岛"</span>,
-      <span class="json-key">"totalMile"</span>: <span class="json-number">390.0</span>,
-      <span class="json-key">"vehicleVolumeRatio"</span>: <span class="json-number">0.69</span>,
-      <span class="json-key">"vehicleWeightRatio"</span>: <span class="json-number">0.99</span>,
-      <span class="json-key">"orders"</span>: <details open><summary>[ ... ] (<span class="json-key">orders</span>)</summary><pre><code>[
-        <details open><summary>{ ... } (order 1 in results)</summary><pre><code>{
-          <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
-          <span class="json-key">"orderNo"</span>: <span class="json-string">"P0001"</span>,
-          <span class="json-key">"seq"</span>: <span class="json-number">1</span>,
-          <span class="json-key">"eta"</span>: <span class="json-string">"2025-03-04 10:00:00"</span>,
-          <span class="json-key">"etd"</span>: <span class="json-string">"2025-03-04 10:20:00"</span>,
-          <span class="json-key">"distance"</span>: <span class="json-number">16.0</span>,
-          <span class="json-key">"duration"</span>: <span class="json-number">0.36</span>,
-          <span class="json-key">"qty"</span>: <span class="json-number">10</span>,
-          <span class="json-key">"grossWeight"</span>: <span class="json-number">15.5</span>,
-          <span class="json-key">"cubic"</span>: <span class="json-number">42.7</span>,
-          <span class="json-key">"qtyPlanned"</span>: <span class="json-number">5</span>,
-          <span class="json-key">"grossWeightPlanned"</span>: <span class="json-number">7.5</span>,
-          <span class="json-key">"cubicPlanned"</span>: <span class="json-number">21.3</span>,
-          <span class="json-key">"goods"</span>: <details open><summary>[ ... ] (<span class="json-key">goods</span>)</summary><pre><code>[
-            <details open><summary>{ ... } (good 1)</summary><pre><code>{
-              <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
-              <span class="json-key">"taskLineNo"</span>: <span class="json-string">"1"</span>,
-              <span class="json-key">"sku"</span>: <span class="json-string">"210001"</span>,
-              <span class="json-key">"skuDescr1"</span>: <span class="json-string">"老酸奶"</span>,
-              <span class="json-key">"qty"</span>: <span class="json-number">2</span>,
-              <span class="json-key">"grossweight"</span>: <span class="json-number">2.0</span>, <span class="json-comment">// Note: "grossweight" not "grossWeight"</span>
-              <span class="json-key">"cubic"</span>: <span class="json-number">6.2</span>,
-              <span class="json-key">"qtyPlanned"</span>: <span class="json-number">2</span>,
-              <span class="json-key">"grossWeightPlanned"</span>: <span class="json-number">2.0</span>,
-              <span class="json-key">"cubicPlanned"</span>: <span class="json-number">6.2</span>
-            }</code></pre></details>
-          ]</code></pre></details>
-        }</code></pre></details>
-      ]</code></pre></details>
-    }</code></pre></details>
-  ]</code></pre></details>
+  "success": true,
+  "code": "10000",
+  "msg": "成功",
+  "results": [
+    {
+      "dispatchId": "DIS0001",
+      "waybillNo": "BIL001",
+      "vehicleId": "VE0000000215",
+      "vehicleType": "Type1",
+      "temperatureType": "冷藏",
+      "ETD": "2025-03-04 00:00:00",
+      "vehicleLeaveSeq": 1,
+      "routeNoRos": "R0001",
+      "routeNameRos": "石家庄-济南-潍坊-青岛",
+      "totalMile": 390.0,
+      "vehicleVolumeRatio": 0.69,
+      "vehicleWeightRatio": 0.99,
+      "orders": [
+        {
+          "taskNo": "P0001-2",
+          "orderNo": "P0001",
+          "seq": 1,
+          "eta": "2025-03-04 10:00:00",
+          "etd": "2025-03-04 10:20:00",
+          "distance": 16.0,
+          "duration": 0.36,
+          "qty": 10,
+          "grossWeight": 15.5,
+          "cubic": 42.7,
+          "qtyPlanned": 5,
+          "grossWeightPlanned": 7.5,
+          "cubicPlanned": 21.3,
+          "goods": [
+            {
+              "taskNo": "P0001-2",
+              "taskLineNo": "1",
+              "sku": "210001",
+              "skuDescr1": "老酸奶",
+              "qty": 2,
+              "grossweight": 2.0,
+              "cubic": 6.2,
+              "qtyPlanned": 2,
+              "grossWeightPlanned": 2.0,
+              "cubicPlanned": 6.2
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
-                </code></pre>
-            </details>
+                    </code></pre>
+                </div>
+            </div>
         </main>
     </div>
     <script>
-        // Basic script to make details/summary work if needed,
-        // but they should work natively in modern browsers.
-        // You can add more advanced JS for a richer UI if desired.
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+                    const content = document.getElementById(targetId);
+                    const isCollapsed = content.classList.contains('collapsed');
+
+                    if (isCollapsed) {
+                        content.classList.remove('collapsed');
+                        button.classList.remove('collapsed');
+                    } else {
+                        content.classList.add('collapsed');
+                        button.classList.add('collapsed');
+                    }
+                });
+            });
+
+            // 添加全局展开/收缩按钮
+            const toggleAllBtn = document.createElement('button');
+            toggleAllBtn.textContent = '全部展开/收缩';
+            toggleAllBtn.style.marginBottom = '1em';
+            toggleAllBtn.style.padding = '0.5em 1em';
+            toggleAllBtn.style.backgroundColor = '#007bff';
+            toggleAllBtn.style.color = '#fff';
+            toggleAllBtn.style.border = 'none';
+            toggleAllBtn.style.borderRadius = '4px';
+            toggleAllBtn.style.cursor = 'pointer';
+
+            toggleAllBtn.addEventListener('click', () => {
+                const allContents = document.querySelectorAll('.json-content');
+                const allButtons = document.querySelectorAll('.toggle-btn');
+                const allCollapsed = Array.from(allContents).every(content => content.classList.contains('collapsed'));
+
+                allContents.forEach(content => {
+                    content.classList.toggle('collapsed', !allCollapsed);
+                });
+                allButtons.forEach(button => {
+                    button.classList.toggle('collapsed', !allCollapsed);
+                });
+            });
+
+            // 将全局按钮插入到第一个 JSON 容器之前
+            const firstJsonContainer = document.querySelector('.json-container');
+            firstJsonContainer.parentNode.insertBefore(toggleAllBtn, firstJsonContainer);
+        });
     </script>
 </body>
 </html>
