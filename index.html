@@ -61,17 +61,63 @@
 
             <h1 id="math-model">Mathematical Model</h1>
             <h2 id="indices">Indices</h2>
-            <p>[Content for Indices goes here]</p>
+            <table border="1">
+                <tr><th>集合列表</th><th>含义</th></tr>
+                <tr><td>Orders_i</td><td>客户 i 的订单集合，i ∈ D</td></tr>
+                <tr><td>days_i</td><td>订单 m 的允许卸货时间集合，m ∈ Orders_i，i ∈ D</td></tr>
+                <tr><td>D</td><td>客户集合</td></tr>
+                <tr><td>V</td><td>车辆集合</td></tr>
+            </table>
+
             <h2 id="constants">Constants</h2>
-            <p>[Content for Constants goes here]</p>
+            <table border="1">
+                <tr><th>常量</th><th>含义</th></tr>
+                <tr><td>d_ij</td><td>客户 i 到客户 j 的距离，i, j ∈ D</td></tr>
+                <tr><td>speed</td><td>车速</td></tr>
+                <tr><td>w_m</td><td>订单 m 的货物总重量</td></tr>
+                <tr><td>v_m</td><td>订单 m 的货物总体积</td></tr>
+                <tr><td>maxload_k</td><td>车辆 k 的最大载重</td></tr>
+                <tr><td>maxvolume_k</td><td>车辆 k 的最大容量</td></tr>
+                <tr><td>a_mk ∈ {0,1}</td><td>如果订单 m 可以被车辆 k 运送，则 a_mk = 1，否则为 0</td></tr>
+                <tr><td>β_k</td><td>车辆 k 的吨公里费率</td></tr>
+                <tr><td>t_ser</td><td>卸一吨货平均需要的时间</td></tr>
+                <tr><td>[e_i, l_i]</td><td>客户 i 的卸货时间窗口</td></tr>
+            </table>
+
             <h2 id="decision-variables">Decision Variables</h2>
-            <p>[Content for Decision Variables goes here]</p>
+            <table border="1">
+                <tr><th>决策变量</th><th>含义</th></tr>
+                <tr><td>x_ijk ∈ {0,1}</td><td>如果车辆 k 经过 arc(i,j)，则 x_ijk = 1，否则为 0</td></tr>
+            </table>
+
             <h2 id="intermediate-variables">Intermediate Variables</h2>
-            <p>[Content for Intermediate Variables goes here]</p>
+            <table border="1">
+                <tr><th>中间变量</th><th>含义</th></tr>
+                <tr><td>t_ik</td><td>车辆 k 到达客户 i 的时间点</td></tr>
+                <tr><td>u_ik</td><td>车辆 k 访问客户 i 的次序</td></tr>
+                <tr><td>z_k</td><td>如果选择车辆 k，则为 1，否则为 0</td></tr>
+                <tr><td>y_iday</td><td>如果客户 i 的订单在第 day 天被送达，则为 1，否则为 0</td></tr>
+                <tr><td>s_mk</td><td>如果车辆 k 负责订单 m，则为 1，否则为 0</td></tr>
+            </table>
+
             <h2 id="objective-function">Objective Function</h2>
-            <p>[Content for Objective Function goes here]</p>
+            <p>总费用最低</p>
+            <p>Min ∑_{k∈V} β_k ∑_{i∈D} ∑_{j∈D} d_ij x_ijk</p>
+
             <h2 id="constraints">Constraints</h2>
-            <p>[Content for Constraints goes here]</p>
+            <ul>
+                <li>每辆车都必须从仓库出发：<br>∑_{j∈D} x_0jk = z_k, ∀k∈V</li>
+                <li>每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 d_ij 设置为 0 即可）：<br>∑_{i∈D} x_(i,n+1,k) = z_k, ∀k∈V</li>
+                <li>中间节点的进出平衡约束：<br>∑_{i∈D} x_ijk = ∑_{i∈D} x_jik, ∀j∈D, ∀k∈V</li>
+                <li>订单处理约束：如果车辆 k 的路线中包含客户 i，且客户 i 包含订单 m，车辆 k 要选择是否处理这个订单：<br>s_mk ≤ ∑_{j∈D} x_ijk, ∀i∈D, ∀k∈V, m∈Orders_i</li>
+                <li>每个订单都需要派一辆车进行配送：<br>∑_{k} a_mk s_mk = 1, m∈Orders_i, i∈D</li>
+                <li>车辆的载重约束：<br>∑_{m} s_mk w_m ≤ maxload_k, ∀k∈V</li>
+                <li>车辆的容量约束：<br>∑_{m} s_mk v_m ≤ maxvolume_k, ∀k∈V</li>
+                <li>配送顺序下的时间窗约束：<br>t_ik + t_ser ∑_{m∈Orders_i} s_mk w_m + d_ij/speed ≤ t_jk + M(1 - x_ijk), ∀i∈D, ∀j∈D, ∀k∈V</li>
+                <li>MTZ 约束消除子环路：<br>u_ik - u_jk + 1 ≤ M(1 - x_ijk), ∀i∈D, ∀j∈D, ∀k∈V</li>
+                <li>卸货时间窗约束：<br>e_i - M*(1 - y_iday) + 24*day ≤ t_ik ≤ l_i + 24*day + M*(1 - y_iday), i∈D, ∀day∈days_i</li>
+                <li>每个客户有且只有一个卸货时间窗得到满足：<br>∑_{day} y_iday = 1, i∈D</li>
+            </ul>
 
             <h1 id="algorithm">Algorithm</h1>
             <h2 id="split-strategy">Split Strategy</h2>
