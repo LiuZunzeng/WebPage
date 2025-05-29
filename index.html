@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -6,15 +5,12 @@
     <title>Trunkline Transportation Optimization For JunLeBao</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/uh2aQd1dFgdH+3nkkvh6Fw2gLD2o6thbKns2NPrfZQa7PEPWzSnSrbQeK1N1M4Sw==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js" integrity="sha512-rN4lE2qW2O4S9T9vI7n4g3Jvi6e6hT7KCrkS1dJghk2mK50cRiWnE3vK0EVB78W4zC2bH4W8vMBv6H7N1LN+VQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-w5eXR5D1A0N98ehDM3vDR3r5lAKW3qV+dgk6o9dzCYsKkC5s0x2F+sa5JKeS/fS47LWVFpCY3sZfM0F14iX7KXw==" crossorigin="anonymous"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
-    <!-- 内联样式（不变） -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <style>
+        /* Styles for collapsible JSON */
         details {
             border: 1px solid #aaa;
             border-radius: 4px;
@@ -35,19 +31,23 @@
             margin-bottom: 0.5em;
         }
         pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            white-space: pre-wrap; /* Allows wrapping of long lines */
+            word-wrap: break-word; /* Breaks long words if necessary */
             background-color: #f4f4f4;
             padding: 1em;
             border-radius: 4px;
-            overflow-x: auto;
+            overflow-x: auto; /* Adds horizontal scroll for very long non-breaking lines */
         }
-        .json-key { color: #a52a2a; }
-        .json-string { color: #008000; }
-        .json-number { color: #0000ff; }
-        .json-boolean { color: #ff00ff; }
-        .json-null { color: #808080; }
+        .json-key { color: #a52a2a; /* brown */ }
+        .json-string { color: #008000; /* green */ }
+        .json-number { color: #0000ff; /* blue */ }
+        .json-boolean { color: #ff00ff; /* magenta */ }
+        .json-null { color: #808080; /* gray */ }
     </style>
+    <!-- 添加Prism.js行号插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -101,140 +101,140 @@
             <p>
                 This project aims to address the vehicle routing problem considering multiple time window constraints, multi-dimensional capacity constraints, and vehicle-order matching constraints. By using the given order, vehicle, and warehouse information, it calculates the optimal delivery routes.
             </p>
+        <h1 id="math-model">Mathematical Model</h1>
+        <h2 id="indices">Indices</h2>
+        <table>
+            <tr><th>集合列表</th><th>含义</th></tr>
+            <tr><td>\(\text{Orders}_i\)</td><td>客户 \(i\) 的订单集合，\(i \in D\)</td></tr>
+            <tr><td>\(\text{days}_i\)</td><td>订单 \(m\) 的允许卸货时间集合，\(m \in \text{Orders}_i\)，\(i \in D\)</td></tr>
+            <tr><td>\(D\)</td><td>客户集合</td></tr>
+            <tr><td>\(V\)</td><td>车辆集合</td></tr>
+        </table>
 
-            <h1 id="math-model">Mathematical Model</h1>
-            <h2 id="indices">Indices</h2>
-            <table>
-                <tr><th>集合列表</th><th>含义</th></tr>
-                <tr><td>\(\text{Orders}_i\)</td><td>客户 \(i\) 的订单集合，\(i \in D\)</td></tr>
-                <tr><td>\(\text{days}_i\)</td><td>订单 \(m\) 的允许卸货时间集合，\(m \in \text{Orders}_i\)，\(i \in D\)</td></tr>
-                <tr><td>\(D\)</td><td>客户集合</td></tr>
-                <tr><td>\(V\)</td><td>车辆集合</td></tr>
-            </table>
+        <h2 id="constants">Constants</h2>
+        <table>
+            <tr><th>常量</th><th>含义</th></tr>
+            <tr><td>\(d_{ij}\)</td><td>客户 \(i\) 到客户 \(j\) 的距离，\(i, j \in D\)</td></tr>
+            <tr><td>\(\text{speed}\)</td><td>车速</td></tr>
+            <tr><td>\(w_m\)</td><td>订单 \(m\) 的货物总重量</td></tr>
+            <tr><td>\(v_m\)</td><td>订单 \(m\) 的货物总体积</td></tr>
+            <tr><td>\(\text{maxload}_k\)</td><td>车辆 \(k\) 的最大载重</td></tr>
+            <tr><td>\(\text{maxvolume}_k\)</td><td>车辆 \(k\) 的最大容量</td></tr>
+            <tr><td>\(a_{mk} \in \{0,1\}\)</td><td>如果订单 \(m\) 可以被车辆 \(k\) 运送，则 \(a_{mk} = 1\)，否则为 \(0\)</td></tr>
+            <tr><td>\(\beta_k\)</td><td>车辆 \(k\) 的吨公里费率</td></tr>
+            <tr><td>\(t_{\text{ser}}\)</td><td>卸一吨货平均需要的时间</td></tr>
+            <tr><td>\([e_i, l_i]\)</td><td>客户 \(i\) 的卸货时间窗口</td></tr>
+        </table>
 
-            <h2 id="constants">Constants</h2>
-            <table>
-                <tr><th>常量</th><th>含义</th></tr>
-                <tr><td>\(d_{ij}\)</td><td>客户 \(i\) 到客户 \(j\) 的距离，\(i, j \in D\)</td></tr>
-                <tr><td>\(\text{speed}\)</td><td>车速</td></tr>
-                <tr><td>\(w_m\)</td><td>订单 \(m\) 的货物总重量</td></tr>
-                <tr><td>\(v_m\)</td><td>订单 \(m\) 的货物总体积</td></tr>
-                <tr><td>\(\text{maxload}_k\)</td><td>车辆 \(k\) 的最大载重</td></tr>
-                <tr><td>\(\text{maxvolume}_k\)</td><td>车辆 \(k\) 的最大容量</td></tr>
-                <tr><td>\(a_{mk} \in \{0,1\}\)</td><td>如果订单 \(m\) 可以被车辆 \(k\) 运送，则 \(a_{mk} = 1\)，否则为 \(0\)</td></tr>
-                <tr><td>\(\beta_k\)</td><td>车辆 \(k\) 的吨公里费率</td></tr>
-                <tr><td>\(t_{\text{ser}}\)</td><td>卸一吨货平均需要的时间</td></tr>
-                <tr><td>\([e_i, l_i]\)</td><td>客户 \(i\) 的卸货时间窗口</td></tr>
-            </table>
+        <h2 id="decision-variables">Decision Variables</h2>
+        <table>
+            <tr><th>决策变量</th><th>含义</th></tr>
+            <tr><td>\(x_{ijk} \in \{0,1\}\)</td><td>如果车辆 \(k\) 经过 arc(\(i,j\))，则 \(x_{ijk} = 1\)，否则为 \(0\)</td></tr>
+        </table>
 
-            <h2 id="decision-variables">Decision Variables</h2>
-            <table>
-                <tr><th>决策变量</th><th>含义</th></tr>
-                <tr><td>\(x_{ijk} \in \{0,1\}\)</td><td>如果车辆 \(k\) 经过 arc(\(i,j\))，则 \(x_{ijk} = 1\)，否则为 \(0\)</td></tr>
-            </table>
+        <h2 id="intermediate-variables">Intermediate Variables</h2>
+        <table>
+            <tr><th>中间变量</th><th>含义</th></tr>
+            <tr><td>\(t_{ik}\)</td><td>车辆 \(k\) 到达客户 \(i\) 的时间点</td></tr>
+            <tr><td>\(u_{ik}\)</td><td>车辆 \(k\) 访问客户 \(i\) 的次序</td></tr>
+            <tr><td>\(z_k\)</td><td>如果选择车辆 \(k\)，则为 \(1\)，否则为 \(0\)</td></tr>
+            <tr><td>\(y_{i\text{day}}\)</td><td>如果客户 \(i\) 的订单在第 \(\text{day}\) 天被送达，则为 \(1\)，否则为 \(0\)</td></tr>
+            <tr><td>\(s_{mk}\)</td><td>如果车辆 \(k\) 负责订单 \(m\)，则为 \(1\)，否则为 \(0\)</td></tr>
+        </table>
 
-            <h2 id="intermediate-variables">Intermediate Variables</h2>
-            <table>
-                <tr><th>中间变量</th><th>含义</th></tr>
-                <tr><td>\(t_{ik}\)</td><td>车辆 \(k\) 到达客户 \(i\) 的时间点</td></tr>
-                <tr><td>\(u_{ik}\)</td><td>车辆 \(k\) 访问客户 \(i\) 的次序</td></tr>
-                <tr><td>\(z_k\)</td><td>如果选择车辆 \(k\)，则为 \(1\)，否则为 \(0\)</td></tr>
-                <tr><td>\(y_{i\text{day}}\)</td><td>如果客户 \(i\) 的订单在第 \(\text{day}\) 天被送达，则为 \(1\)，否则为 \(0\)</td></tr>
-                <tr><td>\(s_{mk}\)</td><td>如果车辆 \(k\) 负责订单 \(m\)，则为 \(1\)，否则为 \(0\)</td></tr>
-            </table>
+        <h2 id="objective-function">Objective Function</h2>
+        <p>总费用最低</p>
+        <p>\[
+        \min \sum_{k \in V} \beta_k \sum_{i \in D} \sum_{j \in D} d_{ij} x_{ijk}
+        \]</p>
 
-            <h2 id="objective-function">Objective Function</h2>
-            <p>总费用最低</p>
-            <p>\[
-            \min \sum_{k \in V} \beta_k \sum_{i \in D} \sum_{j \in D} d_{ij} x_{ijk}
-            \]</p>
+        <h2 id="constraints">Constraints</h2>
+        <ul>
+            <li>每辆车都必须从仓库出发：<br>\[
+            \sum_{j \in D} x_{0jk} = z_k, \quad \forall k \in V
+            \]</li>
+            <li>每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 \(d_{ij}\) 设置为 0 即可）：<br>\[
+            \sum_{i \in D} x_{i,n+1,k} = z_k, \quad \forall k \in V
+            \]</li>
+            <li>中间节点的进出平衡约束：<br>\[
+            \sum_{i \in D} x_{ijk} = \sum_{i \in D} x_{jik}, \quad \forall j \in D, \forall k \in V
+            \]</li>
+            <li>订单处理约束：如果车辆 \(k\) 的路线中包含客户 \(i\)，且客户 \(i\) 包含订单 \(m\)，车辆 \(k\) 要选择是否处理这个订单：<br>\[
+            s_{mk} \leq \sum_{j \in D} x_{ijk}, \quad \forall i \in D, \forall k \in V, m \in \text{Orders}_i
+            \]</li>
+            <li>每个订单都需要派一辆车进行配送：<br>\[
+            \sum_{k} a_{mk} s_{mk} = 1, \quad m \in \text{Orders}_i, i \in D
+            \]</li>
+            <li>车辆的载重约束：<br>\[
+            \sum_{m} s_{mk} w_m \leq \text{maxload}_k, \quad \forall k \in V
+            \]</li>
+            <li>车辆的容量约束：<br>\[
+            \sum_{m} s_{mk} v_m \leq \text{maxvolume}_k, \quad \forall k \in V
+            \]</li>
+            <li>配送顺序下的时间窗约束：<br>\[
+            t_{ik} + t_{\text{ser}} \sum_{m \in \text{Orders}_i} s_{mk} w_m + \frac{d_{ij}}{\text{speed}} \leq t_{jk} + M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
+            \]</li>
+            <li>MTZ 约束消除子环路：<br>\[
+            u_{ik} - u_{jk} + 1 \leq M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
+            \]</li>
+            <li>卸货时间窗约束：<br>\[
+            e_i - M(1 - y_{i\text{day}}) + 24 \cdot \text{day} \leq t_{ik} \leq l_i + 24 \cdot \text{day} + M(1 - y_{i\text{day}}), \quad i \in D, \forall \text{day} \in \text{days}_i
+            \]</li>
+            <li>每个客户有且只有一个卸货时间窗得到满足：<br>\[
+            \sum_{\text{day}} y_{i\text{day}} = 1, \quad i \in D
+            \]</li>
+        </ul>
 
-            <h2 id="constraints">Constraints</h2>
-            <ul>
-                <li>每辆车都必须从仓库出发：<br>\[
-                \sum_{j \in D} x_{0jk} = z_k, \quad \forall k \in V
-                \]</li>
-                <li>每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 \(d_{ij}\) 设置为 0 即可）：<br>\[
-                \sum_{i \in D} x_{i,n+1,k} = z_k, \quad \forall k \in V
-                \]</li>
-                <li>中间节点的进出平衡约束：<br>\[
-                \sum_{i \in D} x_{ijk} = \sum_{i \in D} x_{jik}, \quad \forall j \in D, \forall k \in V
-                \]</li>
-                <li>订单处理约束：如果车辆 \(k\) 的路线中包含客户 \(i\)，且客户 \(i\) 包含订单 \(m\)，车辆 \(k\) 要选择是否处理这个订单：<br>\[
-                s_{mk} \leq \sum_{j \in D} x_{ijk}, \quad \forall i \in D, \forall k \in V, m \in \text{Orders}_i
-                \]</li>
-                <li>每个订单都需要派一辆车进行配送：<br>\[
-                \sum_{k} a_{mk} s_{mk} = 1, \quad m \in \text{Orders}_i, i \in D
-                \]</li>
-                <li>车辆的载重约束：<br>\[
-                \sum_{m} s_{mk} w_m \leq \text{maxload}_k, \quad \forall k \in V
-                \]</li>
-                <li>车辆的容量约束：<br>\[
-                \sum_{m} s_{mk} v_m \leq \text{maxvolume}_k, \quad \forall k \in V
-                \]</li>
-                <li>配送顺序下的时间窗约束：<br>\[
-                t_{ik} + t_{\text{ser}} \sum_{m \in \text{Orders}_i} s_{mk} w_m + \frac{d_{ij}}{\text{speed}} \leq t_{jk} + M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
-                \]</li>
-                <li>MTZ 约束消除子环路：<br>\[
-                u_{ik} - u_{jk} + 1 \leq M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
-                \]</li>
-                <li>卸货时间窗约束：<br>\[
-                e_i - M(1 - y_{i\text{day}}) + 24 \cdot \text{day} \leq t_{ik} \leq l_i + 24 \cdot \text{day} + M(1 - y_{i\text{day}}), \quad i \in D, \forall \text{day} \in \text{days}_i
-                \]</li>
-                <li>每个客户有且只有一个卸货时间窗得到满足：<br>\[
-                \sum_{\text{day}} y_{i\text{day}} = 1, \quad i \in D
-                \]</li>
-            </ul>
+        <h1 id="algorithm">Algorithm</h1>
+        <h2 id="split-strategy">Split Strategy</h2>
+        <p>
+            拆单策略根据车辆的载重和容积限制，将订单拆分为可装载的子订单，优先处理常温商品，超大商品单独拆分。以下是简化的伪代码：
+        </p>
+        <div class="pseudo-code-container">
+            <pre class="line-numbers"><code class="language-pseudo">
+        算法 按SKU分组拆单
+        输入：订单数据（包含订单编号、重量、体积、SKU详情等）
+        输出：符合车辆限制的子订单集合
 
-            <h1 id="algorithm">Algorithm</h1>
-            <h2 id="split-strategy">Split Strategy</h2>
-            <p>
-                拆单策略根据车辆的载重和容积限制，将订单拆分为可装载的子订单，优先处理常温商品，超大商品单独拆分。以下是简化的伪代码：
-            </p>
-            <div class="pseudo-code-container">
-                <pre class="line-numbers"><code class="language-pseudo">
-            算法 按SKU分组拆单
-            输入：订单数据（包含订单编号、重量、体积、SKU详情等）
-            输出：符合车辆限制的子订单集合
+        1:  初始化：创建空的子订单集合
+        2:  对每个订单进行处理：
+        3:      获取订单可用的最大车辆载重和容积
+        4:      如果订单重量和体积在车辆限制内：
+        5:          将订单标记为零散订单，保留原数据
+        6:          添加到子订单集合
+        7:          跳到下一个订单
+        8:      将SKU分为常温和低温两组，优先常温
+        9:      将SKU分为超大（超出车辆限制）和普通两类
+        10:     初始化一个空子订单
+        11:     对每个超大SKU：
+        12:         创建背包，逐件放入，直至超出车辆限制
+        13:         每满一个背包，保存为非零散子订单
+        14:         最后未满的背包保存为零散子订单
+        15:         将所有背包转为子订单，添加到集合
+        16:     对每个普通SKU：
+        17:         如果当前子订单能装下：
+        18:             添加SKU到当前子订单
+        19:         否则：
+        20:             保存当前子订单为非零散
+        21:             创建新子订单，放入SKU
+        22:     如果当前子订单有物品：
+        23:         保存为零散子订单
+        24: 返回子订单集合
+            </code></pre>
+        </div>
+        <h2 id="improved-hybrid-ga">Improved HGA</h2>
+        <p>[Content for Improved Hybrid Genetic Algorithm goes here]</p>
 
-            1: 初始化：创建空的子订单集合
-            2: 对每个订单进行处理：
-            3:     获取订单可用的最大车辆载重和容积
-            4:     如果订单重量和体积在车辆限制内：
-            5:         将订单标记为零散订单，保留原数据
-            6:         添加到子订单集合
-            7:         跳到下一个订单
-            8:     将SKU分为常温和低温两组，优先常温
-            9:     将SKU分为超大（超出车辆限制）和普通两类
-            10:    初始化一个空子订单
-            11:    对每个超大SKU：
-            12:        创建背包，逐件放入，直至超出车辆限制
-            13:        每满一个背包，保存为非零散子订单
-            14:        最后未满的背包保存为零散子订单
-            15:        将所有背包转为子订单，添加到集合
-            16:    对每个普通SKU：
-            17:        如果当前子订单能装下：
-            18:            添加SKU到当前子订单
-            19:        否则：
-            20:            保存当前子订单为非零散
-            21:            创建新子订单，放入SKU
-            22:    如果当前子订单有物品：
-            23:        保存为零散子订单
-            24: 返回子订单集合
-                </code></pre>
+        <h1 id="io-interface">Input/Output Interface</h1>
+        <h2 id="input-parameters">输入参数（快速入门示例）</h2>
+        <div class="json-container">
+            <div class="json-header">
+                <span class="json-toggle">JSON 输入结构</span>
+                <button class="toggle-btn" data-target="input-json">−</button>
             </div>
-            <h2 id="improved-hybrid-ga">Improved HGA</h2>
-            <p>[Content for Improved Hybrid Genetic Algorithm goes here]</p>
+            <div class="json-content" id="input-json">
+                <pre><code class="language-json">
 
-            <h1 id="io-interface">Input/Output Interface</h1>
-            <h2 id="input-parameters">输入参数（快速入门示例）</h2>
-            <div class="json-container">
-                <div class="json-header">
-                    <span class="json-toggle">JSON 输入结构</span>
-                    <button class="toggle-btn" data-target="input-json">−</button>
-                </div>
-                <div class="json-content" id="input-json">
-                    <pre><code class="language-json">
 {
   "dispatchId": "DIS0001",
   "config": {
@@ -359,14 +359,15 @@
                 </div>
             </div>
 
-            <h2 id="output-parameters">输出参数（快速入门示例）</h2>
-            <div class="json-container">
-                <div class="json-header">
-                    <span class="json-toggle">JSON 输出结构</span>
-                    <button class="toggle-btn" data-target="output-json">−</button>
-                </div>
-                <div class="json-content" id="output-json">
-                    <pre><code class="language-json">
+        <h2 id="output-parameters">输出参数（快速入门示例）</h2>
+        <div class="json-container">
+            <div class="json-header">
+                <span class="json-toggle">JSON 输出结构</span>
+                <button class="toggle-btn" data-target="output-json">−</button>
+            </div>
+            <div class="json-content" id="output-json">
+                <pre><code class="language-json">
+
 {
   "success": true,
   "code": "10000",
@@ -425,6 +426,6 @@
         </main>
     </div>
     <script>
-    </script>
-</body>
+    </script></body>
 </html>
+
