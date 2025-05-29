@@ -191,7 +191,8 @@
             <p>
                 拆单策略根据车辆的载重和容积限制，将订单拆分为可装载的子订单，优先处理常温商品，超大商品单独拆分。以下是简化的伪代码：
             </p>
-            <pre><code class="language-pseudo">
+            <div class="pseudo-code-container">
+                <pre class="line-numbers"><code class="language-pseudo">
             算法 按SKU分组拆单
             输入：订单数据（包含订单编号、重量、体积、SKU详情等）
             输出：符合车辆限制的子订单集合
@@ -220,7 +221,8 @@
             22:     如果当前子订单有物品：
             23:         保存为零散子订单
             24: 返回子订单集合
-            </code></pre>
+                </code></pre>
+            </div>
             <h2 id="improved-hybrid-ga">Improved HGA</h2>
             <p>[Content for Improved Hybrid Genetic Algorithm goes here]</p>
 
