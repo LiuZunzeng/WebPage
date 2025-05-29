@@ -116,7 +116,7 @@
             <h2 id="constants">Constants</h2>
             <table>
                 <tr><th>常量</th><th>含义</th></tr>
-                <tr><td>\(d_{ij}\)</td><td>客户 \(i\) 到客户 \(j\) 的距离，\(i, j \in D\)</td></tr>
+                <tr><td>\(d_{ijk}\)</td><td>对于车辆\(k\)，客户 \(i\) 到客户 \(j\) 的距离，\(i, j \in D\)</td></tr>
                 <tr><td>\(\text{speed}\)</td><td>车速</td></tr>
                 <tr><td>\(w_m\)</td><td>订单 \(m\) 的货物总重量</td></tr>
                 <tr><td>\(v_m\)</td><td>订单 \(m\) 的货物总体积</td></tr>
@@ -147,7 +147,7 @@
             <h2 id="objective-function">Objective Function</h2>
             <p>总费用最低</p>
             <p>\[
-            \min \sum_{k \in V} \beta_k \sum_{i \in D} \sum_{j \in D} d_{ij} x_{ijk}
+            \min \sum_{k \in V} \beta_k \sum_{i \in D} \sum_{j \in D} d_{ijk} x_{ijk}
             \]</p>
 
             <h2 id="constraints">Constraints</h2>
@@ -174,7 +174,7 @@
                 \sum_{m} s_{mk} v_m \leq \text{maxvolume}_k, \quad \forall k \in V
                 \]</li>
                 <li>配送顺序下的时间窗约束：<br>\[
-                t_{ik} + t_{\text{ser}} \sum_{m \in \text{Orders}_i} s_{mk} w_m + \frac{d_{ij}}{\text{speed}} \leq t_{jk} + M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
+                t_{ik} + t_{\text{ser}} \sum_{m \in \text{Orders}_i} s_{mk} w_m + \frac{d_{ijk}}{\text{speed}} \leq t_{jk} + M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
                 \]</li>
                 <li>MTZ 约束消除子环路：<br>\[
                 u_{ik} - u_{jk} + 1 \leq M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
