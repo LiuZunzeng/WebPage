@@ -1,33 +1,43 @@
-// 搜索功能
-document.getElementById('search').addEventListener('input', function(e) {
-    const searchText = e.target.value.toLowerCase();
-    const links = document.querySelectorAll('.sidebar a');
-    links.forEach(link => {
-        const text = link.textContent.toLowerCase();
-        link.parentElement.style.display = text.includes(searchText) ? 'block' : 'none';
+// 合并的DOMContentLoaded事件监听器
+document.addEventListener('DOMContentLoaded', function() {
+    // 自定义Prism.js高亮规则
+    Prism.languages.pseudo = {
+        'keyword': /\b(算法|输入|输出|如果|否则|对每个|初始化|返回)\b/,
+        'string': /“[^”]+”/,
+        'comment': /\/\/.*$/
+    };
+
+    // 确保Prism.js高亮应用
+    Prism.highlightAll();
+
+    // 搜索功能
+    document.getElementById('search').addEventListener('input', function(e) {
+        const searchText = e.target.value.toLowerCase();
+        const links = document.querySelectorAll('.sidebar a');
+        links.forEach(link => {
+            const text = link.textContent.toLowerCase();
+            link.parentElement.style.display = text.includes(searchText) ? 'block' : 'none';
+        });
     });
-});
 
-// 子菜单切换功能
-document.querySelectorAll('.toggle').forEach(toggle => {
-    toggle.addEventListener('click', function(e) {
-        e.preventDefault(); // 阻止默认锚点跳转
-        const submenu = this.nextElementSibling; // 获取子菜单
-        submenu.classList.toggle('active'); // 切换 active 类
-        // 手动设置显示/隐藏
-        submenu.style.display = submenu.classList.contains('active') ? 'block' : 'none';
+    // 子菜单切换功能
+    document.querySelectorAll('.toggle').forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault(); // 阻止默认锚点跳转
+            const submenu = this.nextElementSibling; // 获取子菜单
+            submenu.classList.toggle('active'); // 切换 active 类
+            submenu.style.display = submenu.classList.contains('active') ? 'block' : 'none';
+        });
     });
-});
 
-// 默认展开子菜单
-document.querySelectorAll('.submenu').forEach(submenu => {
-    submenu.classList.add('active'); // 添加 active 类
-    submenu.style.display = 'block'; // 确保默认显示
-});
+    // 默认展开子菜单
+    document.querySelectorAll('.submenu').forEach(submenu => {
+        submenu.classList.add('active');
+        submenu.style.display = 'block';
+    });
 
-document.addEventListener('DOMContentLoaded', () => {
+    // JSON内容折叠功能
     const toggleButtons = document.querySelectorAll('.toggle-btn');
-
     toggleButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetId = button.getAttribute('data-target');
@@ -37,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isCollapsed) {
                 content.classList.remove('collapsed');
                 button.classList.remove('collapsed');
-                // 动态设置 max-height 为内容的实际高度
                 content.style.maxHeight = content.scrollHeight + 'px';
             } else {
                 content.classList.add('collapsed');
@@ -47,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 可选：添加全局展开/收缩按钮
+    // 全局展开/收缩按钮
     const toggleAllBtn = document.createElement('button');
     toggleAllBtn.textContent = '全部展开/收缩';
     toggleAllBtn.style.marginBottom = '1em';
@@ -76,19 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 将全局按钮插入到第一个 JSON 容器之前
+    // 将全局按钮插入到第一个JSON容器之前
     const firstJsonContainer = document.querySelector('.json-container');
     firstJsonContainer.parentNode.insertBefore(toggleAllBtn, firstJsonContainer);
-});
-
-// 自定义Prism.js高亮规则
-Prism.languages.pseudo = {
-    'keyword': /\b(算法|输入|输出|如果|否则|对每个|初始化|返回)\b/,
-    'string': /“[^”]+”/,
-    'comment': /\/\/.*$/
-};
-
-// 确保页面加载后应用行号
-document.addEventListener('DOMContentLoaded', function() {
-    Prism.highlightAll();
 });
