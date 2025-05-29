@@ -6,6 +6,8 @@
     <title>Trunkline Transportation Optimization For JunLeBao</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
+    <!-- 引入 MathJax 用于渲染数学公式 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </head>
 <body>
     <div class="container">
@@ -63,60 +65,84 @@
             <h2 id="indices">Indices</h2>
             <table border="1">
                 <tr><th>集合列表</th><th>含义</th></tr>
-                <tr><td>Orders_i</td><td>客户 i 的订单集合，i ∈ D</td></tr>
-                <tr><td>days_i</td><td>订单 m 的允许卸货时间集合，m ∈ Orders_i，i ∈ D</td></tr>
-                <tr><td>D</td><td>客户集合</td></tr>
-                <tr><td>V</td><td>车辆集合</td></tr>
+                <tr><td>\(\text{Orders}_i\)</td><td>客户 \(i\) 的订单集合，\(i \in D\)</td></tr>
+                <tr><td>\(\text{days}_i\)</td><td>订单 \(m\) 的允许卸货时间集合，\(m \in \text{Orders}_i\)，\(i \in D\)</td></tr>
+                <tr><td>\(D\)</td><td>客户集合</td></tr>
+                <tr><td>\(V\)</td><td>车辆集合</td></tr>
             </table>
 
             <h2 id="constants">Constants</h2>
             <table border="1">
                 <tr><th>常量</th><th>含义</th></tr>
-                <tr><td>d_ij</td><td>客户 i 到客户 j 的距离，i, j ∈ D</td></tr>
-                <tr><td>speed</td><td>车速</td></tr>
-                <tr><td>w_m</td><td>订单 m 的货物总重量</td></tr>
-                <tr><td>v_m</td><td>订单 m 的货物总体积</td></tr>
-                <tr><td>maxload_k</td><td>车辆 k 的最大载重</td></tr>
-                <tr><td>maxvolume_k</td><td>车辆 k 的最大容量</td></tr>
-                <tr><td>a_mk ∈ {0,1}</td><td>如果订单 m 可以被车辆 k 运送，则 a_mk = 1，否则为 0</td></tr>
-                <tr><td>β_k</td><td>车辆 k 的吨公里费率</td></tr>
-                <tr><td>t_ser</td><td>卸一吨货平均需要的时间</td></tr>
-                <tr><td>[e_i, l_i]</td><td>客户 i 的卸货时间窗口</td></tr>
+                <tr><td>\(d_{ij}\)</td><td>客户 \(i\) 到客户 \(j\) 的距离，\(i, j \in D\)</td></tr>
+                <tr><td>\(\text{speed}\)</td><td>车速</td></tr>
+                <tr><td>\(w_m\)</td><td>订单 \(m\) 的货物总重量</td></tr>
+                <tr><td>\(v_m\)</td><td>订单 \(m\) 的货物总体积</td></tr>
+                <tr><td>\(\text{maxload}_k\)</td><td>车辆 \(k\) 的最大载重</td></tr>
+                <tr><td>\(\text{maxvolume}_k\)</td><td>车辆 \(k\) 的最大容量</td></tr>
+                <tr><td>\(a_{mk} \in \{0,1\}\)</td><td>如果订单 \(m\) 可以被车辆 \(k\) 运送，则 \(a_{mk} = 1\)，否则为 \(0\)</td></tr>
+                <tr><td>\(\beta_k\)</td><td>车辆 \(k\) 的吨公里费率</td></tr>
+                <tr><td>\(t_{\text{ser}}\)</td><td>卸一吨货平均需要的时间</td></tr>
+                <tr><td>\([e_i, l_i]\)</td><td>客户 \(i\) 的卸货时间窗口</td></tr>
             </table>
 
             <h2 id="decision-variables">Decision Variables</h2>
             <table border="1">
                 <tr><th>决策变量</th><th>含义</th></tr>
-                <tr><td>x_ijk ∈ {0,1}</td><td>如果车辆 k 经过 arc(i,j)，则 x_ijk = 1，否则为 0</td></tr>
+                <tr><td>\(x_{ijk} \in \{0,1\}\)</td><td>如果车辆 \(k\) 经过 arc(\(i,j\))，则 \(x_{ijk} = 1\)，否则为 \(0\)</td></tr>
             </table>
 
             <h2 id="intermediate-variables">Intermediate Variables</h2>
             <table border="1">
                 <tr><th>中间变量</th><th>含义</th></tr>
-                <tr><td>t_ik</td><td>车辆 k 到达客户 i 的时间点</td></tr>
-                <tr><td>u_ik</td><td>车辆 k 访问客户 i 的次序</td></tr>
-                <tr><td>z_k</td><td>如果选择车辆 k，则为 1，否则为 0</td></tr>
-                <tr><td>y_iday</td><td>如果客户 i 的订单在第 day 天被送达，则为 1，否则为 0</td></tr>
-                <tr><td>s_mk</td><td>如果车辆 k 负责订单 m，则为 1，否则为 0</td></tr>
+                <tr><td>\(t_{ik}\)</td><td>车辆 \(k\) 到达客户 \(i\) 的时间点</td></tr>
+                <tr><td>\(u_{ik}\)</td><td>车辆 \(k\) 访问客户 \(i\) 的次序</td></tr>
+                <tr><td>\(z_k\)</td><td>如果选择车辆 \(k\)，则为 \(1\)，否则为 \(0\)</td></tr>
+                <tr><td>\(y_{i\text{day}}\)</td><td>如果客户 \(i\) 的订单在第 \(\text{day}\) 天被送达，则为 \(1\)，否则为 \(0\)</td></tr>
+                <tr><td>\(s_{mk}\)</td><td>如果车辆 \(k\) 负责订单 \(m\)，则为 \(1\)，否则为 \(0\)</td></tr>
             </table>
 
             <h2 id="objective-function">Objective Function</h2>
             <p>总费用最低</p>
-            <p>Min ∑_{k∈V} β_k ∑_{i∈D} ∑_{j∈D} d_ij x_ijk</p>
+            <p>\[
+            \min \sum_{k \in V} \beta_k \sum_{i \in D} \sum_{j \in D} d_{ij} x_{ijk}
+            \]</p>
 
             <h2 id="constraints">Constraints</h2>
             <ul>
-                <li>每辆车都必须从仓库出发：<br>∑_{j∈D} x_0jk = z_k, ∀k∈V</li>
-                <li>每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 d_ij 设置为 0 即可）：<br>∑_{i∈D} x_(i,n+1,k) = z_k, ∀k∈V</li>
-                <li>中间节点的进出平衡约束：<br>∑_{i∈D} x_ijk = ∑_{i∈D} x_jik, ∀j∈D, ∀k∈V</li>
-                <li>订单处理约束：如果车辆 k 的路线中包含客户 i，且客户 i 包含订单 m，车辆 k 要选择是否处理这个订单：<br>s_mk ≤ ∑_{j∈D} x_ijk, ∀i∈D, ∀k∈V, m∈Orders_i</li>
-                <li>每个订单都需要派一辆车进行配送：<br>∑_{k} a_mk s_mk = 1, m∈Orders_i, i∈D</li>
-                <li>车辆的载重约束：<br>∑_{m} s_mk w_m ≤ maxload_k, ∀k∈V</li>
-                <li>车辆的容量约束：<br>∑_{m} s_mk v_m ≤ maxvolume_k, ∀k∈V</li>
-                <li>配送顺序下的时间窗约束：<br>t_ik + t_ser ∑_{m∈Orders_i} s_mk w_m + d_ij/speed ≤ t_jk + M(1 - x_ijk), ∀i∈D, ∀j∈D, ∀k∈V</li>
-                <li>MTZ 约束消除子环路：<br>u_ik - u_jk + 1 ≤ M(1 - x_ijk), ∀i∈D, ∀j∈D, ∀k∈V</li>
-                <li>卸货时间窗约束：<br>e_i - M*(1 - y_iday) + 24*day ≤ t_ik ≤ l_i + 24*day + M*(1 - y_iday), i∈D, ∀day∈days_i</li>
-                <li>每个客户有且只有一个卸货时间窗得到满足：<br>∑_{day} y_iday = 1, i∈D</li>
+                <li>每辆车都必须从仓库出发：<br>\[
+                \sum_{j \in D} x_{0jk} = z_k, \quad \forall k \in V
+                \]</li>
+                <li>每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 \(d_{ij}\) 设置为 0 即可）：<br>\[
+                \sum_{i \in D} x_{i,n+1,k} = z_k, \quad \forall k \in V
+                \]</li>
+                <li>中间节点的进出平衡约束：<br>\[
+                \sum_{i \in D} x_{ijk} = \sum_{i \in D} x_{jik}, \quad \forall j \in D, \forall k \in V
+                \]</li>
+                <li>订单处理约束：如果车辆 \(k\) 的路线中包含客户 \(i\)，且客户 \(i\) 包含订单 \(m\)，车辆 \(k\) 要选择是否处理这个订单：<br>\[
+                s_{mk} \leq \sum_{j \in D} x_{ijk}, \quad \forall i \in D, \forall k \in V, m \in \text{Orders}_i
+                \]</li>
+                <li>每个订单都需要派一辆车进行配送：<br>\[
+                \sum_{k} a_{mk} s_{mk} = 1, \quad m \in \text{Orders}_i, i \in D
+                \]</li>
+                <li>车辆的载重约束：<br>\[
+                \sum_{m} s_{mk} w_m \leq \text{maxload}_k, \quad \forall k \in V
+                \]</li>
+                <li>车辆的容量约束：<br>\[
+                \sum_{m} s_{mk} v_m \leq \text{maxvolume}_k, \quad \forall k \in V
+                \]</li>
+                <li>配送顺序下的时间窗约束：<br>\[
+                t_{ik} + t_{\text{ser}} \sum_{m \in \text{Orders}_i} s_{mk} w_m + \frac{d_{ij}}{\text{speed}} \leq t_{jk} + M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
+                \]</li>
+                <li>MTZ 约束消除子环路：<br>\[
+                u_{ik} - u_{jk} + 1 \leq M(1 - x_{ijk}), \quad \forall i \in D, \forall j \in D, \forall k \in V
+                \]</li>
+                <li>卸货时间窗约束：<br>\[
+                e_i - M(1 - y_{i\text{day}}) + 24 \cdot \text{day} \leq t_{ik} \leq l_i + 24 \cdot \text{day} + M(1 - y_{i\text{day}}), \quad i \in D, \forall \text{day} \in \text{days}_i
+                \]</li>
+                <li>每个客户有且只有一个卸货时间窗得到满足：<br>\[
+                \sum_{\text{day}} y_{i\text{day}} = 1, \quad i \in D
+                \]</li>
             </ul>
 
             <h1 id="algorithm">Algorithm</h1>
