@@ -260,34 +260,6 @@ pre {
     overflow-x: auto;
 }
 
-/* 高亮伪代码中的关键字 */
-.language-pseudo .keyword {
-    color: #d73a49; /* 红色关键字 */
-    font-weight: bold; /* 加粗以提高可见性 */
-}
-
-.language-pseudo .comment {
-    color: #6a737d; /* 灰色注释 */
-    font-style: italic;
-}
-
-.language-pseudo .string {
-    color: #032f62; /* 深蓝色字符串 */
-}
-
-/* 确保 Prism.js 默认样式不被覆盖 */
-pre[class*="language-"] {
-    background: #f8f9fa;
-    border: none;
-    margin: 0;
-    font-size: 0.9em; /* 减小字体提高可读性 */
-}
-
-code[class*="language-"] {
-    font-family: 'Source Code Pro', 'Consolas', monospace;
-    background: transparent; /* 确保代码块背景透明 */
-}
-
 /* 行号样式 */
 pre.line-numbers {
     position: relative;
@@ -324,6 +296,31 @@ pre.line-numbers > code {
     display: block;
     text-align: right;
     padding-right: 1em;
+}
+
+/* 高亮伪代码中的关键字 */
+.language-pseudo .keyword {
+    color: #d73a49; /* 红色关键字，如“算法”“如果” */
+}
+
+.language-pseudo .comment {
+    color: #6a737d; /* 灰色注释 */
+    font-style: italic;
+}
+
+.language-pseudo .string {
+    color: #032f62; /* 深蓝色字符串，如“订单{订单编号}” */
+}
+
+/* Prism.js 主题调整（可选） */
+pre[class*="language-"] {
+    background: #f8f9fa;
+    border: none;
+    margin: 0;
+}
+
+code[class*="language-"] {
+    font-family: 'Fira Code', 'Consolas', monospace;
 }
 
 /* 响应式设计 */
