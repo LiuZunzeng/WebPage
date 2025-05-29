@@ -96,6 +96,20 @@ main a:hover {
     text-decoration: underline;
 }
 
+/* 优化有序列表样式 */
+main ol {
+    margin-left: 20px; /* 列表缩进 */
+    margin-bottom: 20px; /* 列表底部外边距 */
+    line-height: 1.8; /* 行间距设为1.8倍，增加文字行之间的空隙 */
+}
+
+/* 列表项样式 */
+main ol li {
+    margin-bottom: 15px; /* 每个列表项之间的间距 */
+    font-size: 16px; /* 继承 main 的字体大小 */
+    color: #555; /* 与其他正文颜色一致 */
+}
+
 /* 表格样式 */
 table {
     width: 100%;
