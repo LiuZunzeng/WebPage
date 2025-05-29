@@ -180,3 +180,90 @@ tr:hover {
 .submenu.active {
     display: block;
 }
+
+/* Improved styles for collapsible JSON (添加到 styles.css 文件末尾) */
+details {
+    border: 1px solid #e0e0e0; /* Softer border */
+    border-radius: 6px; /* Slightly more rounded corners */
+    margin-bottom: 0.8em;
+    background-color: #fff; /* White background for details block */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow */
+}
+
+summary {
+    font-weight: 600; /* Bolder summary */
+    padding: 0.8em 1em; /* More padding */
+    cursor: pointer;
+    position: relative; /* For custom marker positioning */
+    list-style: none; /* Remove default marker */
+    color: #1a73e8; /* 与您的侧边栏链接颜色一致 */
+    background-color: #f8f9fa; /* Light background for summary */
+    border-bottom: 1px solid #e0e0e0; /* Separator line */
+    transition: background-color 0.2s ease;
+}
+details[open] summary {
+    background-color: #e9ecef; /* Slightly darker when open */
+}
+
+summary:hover {
+    background-color: #e9ecef; /* Hover effect */
+}
+
+summary::-webkit-details-marker { /* Hide default marker for Chrome/Safari */
+    display: none;
+}
+summary::marker { /* Hide default marker for Firefox */
+   display: none;
+   font-size: 0;
+   color: transparent;
+}
+
+
+summary::before { /* Custom marker */
+    content: '▸'; /* Right-pointing triangle for collapsed state */
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #555; /* Marker color */
+    transition: transform 0.2s ease-in-out;
+}
+
+details[open] > summary::before {
+    transform: translateY(-50%) rotate(90deg); /* Down-pointing triangle for expanded state */
+}
+
+details > pre {
+    padding: 1em 1.5em;
+    background-color: #fff;
+    border-top: 1px solid #e0e0e0;
+}
+details[open] > summary {
+    border-bottom: none;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background-color: #fdfdfd;
+    padding: 1em;
+    border-radius: 0 0 6px 6px;
+    overflow-x: auto;
+    margin: 0;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Syntax highlighting styles (可以根据您的喜好调整) */
+.json-key { color: #c8325b; }
+.json-string { color: #008000; }
+.json-number { color: #005cc5; }
+.json-boolean { color: #d11ad0; }
+.json-null { color: #777; }
+.json-comment { color: #6a737d; font-style: italic; }
+
+/* Indentation styling for nested details */
+details details {
+    margin-left: 20px;
+    border-left: 2px solid #1a73e8; /* 与您的主题色一致 */
+}
