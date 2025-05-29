@@ -231,25 +231,22 @@ tr:hover {
 }
 
 .json-content {
-    max-height: 1000px; /* 用于动画的足够大值 */
     overflow: hidden;
     transition: max-height 0.3s ease, opacity 0.3s ease;
     opacity: 1;
 }
-
 .json-content.collapsed {
     max-height: 0;
     opacity: 0;
 }
-
 pre {
-    margin: 0;
-    padding: 1em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     background-color: #f8f9fa;
+    padding: 1em;
     border-radius: 0 0 8px 8px;
-    font-size: 0.95em;
-    line-height: 1.5;
     overflow-x: auto;
+    margin: 0;
 }
 
 /* Prism.js 主题调整（可选） */

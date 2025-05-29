@@ -37,9 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isCollapsed) {
                 content.classList.remove('collapsed');
                 button.classList.remove('collapsed');
+                // 动态设置 max-height 为内容的实际高度
+                content.style.maxHeight = content.scrollHeight + 'px';
             } else {
                 content.classList.add('collapsed');
                 button.classList.add('collapsed');
+                content.style.maxHeight = '0';
             }
         });
     });
@@ -62,6 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         allContents.forEach(content => {
             content.classList.toggle('collapsed', !allCollapsed);
+            if (!allCollapsed) {
+                content.style.maxHeight = '0';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
         });
         allButtons.forEach(button => {
             button.classList.toggle('collapsed', !allCollapsed);
