@@ -98,9 +98,9 @@ main a:hover {
 
 /* 优化有序列表样式 */
 main ol {
-    margin-left: 20px; /* 列表缩进 */
-    margin-bottom: 20px; /* 列表底部外边距 */
-    line-height: 1.8; /* 行间距设为1.8倍，增加文字行之间的空隙 */
+    margin-left: 30px; /* 列表缩进 */
+    margin-bottom: 30px; /* 列表底部外边距 */
+    line-height: 3; /* 行间距设为1.8倍，增加文字行之间的空隙 */
 }
 
 /* 列表项样式 */
