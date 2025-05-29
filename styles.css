@@ -98,8 +98,8 @@ main a:hover {
 
 /* 优化有序列表样式 */
 main ol {
-    margin-left: 40px; /* 列表缩进 */
-    margin-bottom: 40px; /* 列表底部外边距 */
+    margin-left: 50px; /* 列表缩进 */
+    margin-bottom: 50px; /* 列表底部外边距 */
     line-height: 3; /* 行间距设为1.8倍，增加文字行之间的空隙 */
 }
 
