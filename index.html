@@ -225,11 +225,11 @@
                 </code></pre>
             </div>
             <h2 id="improved-hybrid-ga">Schedule Strategy</h2>
-            <p>调度策略包括以下关键步骤：</p>
+            <p>调度策略包括以下关键步骤，具体实现细节可参考相关源代码文件：</p>
             <ol>
-                <li>对整车子订单（重量或体积很接近车辆的容量上限的子订单）单独排线，以优化车辆使用效率。</li>
-                <li>对 pyvrp 的源码进行改动，添加多维度容量约束，使算法能够同时考虑车辆对订单体积和订单重量的限制。</li>
-                <li>在进入 pyvrp 之前，检查所有订单在时间维度上的可行性，若发现不可行订单，则不进入 pyvrp。</li>
+                <li>对整车子订单（子订单的总重量或总体积接近车辆容量上限）进行独立路径规划，以降低 pyvrp 的求解复杂度。具体实现细节请参阅 <code>entireVehiclePlanning.py</code> 文件。</li>
+                <li>通过修改 pyvrp 源代码，引入多维度容量约束，支持同时考虑订单的体积和重量限制，以优化车辆分配效率。具体实现细节请参阅 <code>pyvrp_modified-1.0.0-py3-none-any.whl</code> 文件。</li>
+                <li>在调用 pyvrp 之前，预先验证所有订单在时间维度上的可行性，剔除不可行订单，以避免 pyvrp 处理无效算例。具体实现细节请参阅 <code>vrpSolver.py</code> 文件。</li>
             </ol>
 
             <h1 id="io-interface">Input/Output Interface</h1>
