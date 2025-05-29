@@ -7,6 +7,41 @@
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        /* Styles for collapsible JSON */
+        details {
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            padding: 0.5em 0.5em 0;
+            margin-bottom: 0.5em;
+        }
+        summary {
+            font-weight: bold;
+            margin: -0.5em -0.5em 0;
+            padding: 0.5em;
+            cursor: pointer;
+        }
+        details[open] {
+            padding: 0.5em;
+        }
+        details[open] summary {
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 0.5em;
+        }
+        pre {
+            white-space: pre-wrap; /* Allows wrapping of long lines */
+            word-wrap: break-word; /* Breaks long words if necessary */
+            background-color: #f4f4f4;
+            padding: 1em;
+            border-radius: 4px;
+            overflow-x: auto; /* Adds horizontal scroll for very long non-breaking lines */
+        }
+        .json-key { color: #a52a2a; /* brown */ }
+        .json-string { color: #008000; /* green */ }
+        .json-number { color: #0000ff; /* blue */ }
+        .json-boolean { color: #ff00ff; /* magenta */ }
+        .json-null { color: #808080; /* gray */ }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -151,911 +186,197 @@
             <p>[Content for Improved Hybrid Genetic Algorithm goes here]</p>
 
             <h1 id="io-interface">Input/Output Interface</h1>
-            <h2 id="input-parameters">Input Parameters</h2>
-            <p>The request method is POST, and the format is JSON. Tasks are uploaded via the <code>/process</code> endpoint. After a few minutes, the results are returned. Only one schedule can be uploaded per <code>process</code> call. [cite: 1]</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>参数名</th>
-                        <th>含义</th>
-                        <th>类型</th>
-                        <th>举例</th>
-                        <th>默认值</th>
-                        <th>是否必须</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>dispatchId</td>
-                        <td>调度记录ID</td>
-                        <td>string</td>
-                        <td>DIS0001</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>config</td>
-                        <td>可选配置字段</td>
-                        <td>object</td>
-                        <td></td>
-                        <td></td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>DELIVERY_LOADING_SPEED</td>
-                        <td>车辆装卸货速度(货量/分钟)</td>
-                        <td>float</td>
-                        <td>1.5</td>
-                        <td>2.0</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>DELIVERY_STAY_MINUTE</td>
-                        <td>最少停留时间(分钟)</td>
-                        <td>float</td>
-                        <td>8.0</td>
-                        <td>8.0</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>ROS_VEHICLE_SPEED</td>
-                        <td>车速 (km/h)</td>
-                        <td>float</td>
-                        <td>50.0</td>
-                        <td>50.0</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>ROS_SPLIT_ORDER</td>
-                        <td>是否允许拆单, "Y"表示允许, "N"表示不允许</td>
-                        <td>string</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>ROS_NORMAL_TEMPERATURE_RATIO</td>
-                        <td>冷藏车中常温订单最大占比</td>
-                        <td>float</td>
-                        <td>0.90</td>
-                        <td>-1</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>depots</td>
-                        <td>物流中心</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>branchId</td>
-                        <td>物流中心代码</td>
-                        <td>string</td>
-                        <td>WH01</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>branchDescr</td>
-                        <td>物流中心名称</td>
-                        <td>string</td>
-                        <td>张江物流中心</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>longitude</td>
-                        <td>经度(东经为正,西经为负)</td>
-                        <td>string</td>
-                        <td>121.47390</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>latitude</td>
-                        <td>纬度(北纬为正,南纬为负)</td>
-                        <td>string</td>
-                        <td>31.22805</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>notes</td>
-                        <td>说明</td>
-                        <td>string</td>
-                        <td>仓库说明</td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>branch_status</td>
-                        <td>仓库是否可用, "1"代表可用, "0"代表不可用</td>
-                        <td>string</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>dispatchZone</td>
-                        <td>调度分区信息</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td></td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>dispatchZoneCode</td>
-                        <td>分区编号</td>
-                        <td>string</td>
-                        <td>DISZONE001</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>departureWave</td>
-                        <td>发车波次: 车辆预计发运时间的浮动范围, 允许设置多个</td>
-                        <td>string</td>
-                        <td>0:00-1:00,2:00-4:00</td>
-                        <td>0:00-24:00</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>longitude</td>
-                        <td>参考中心的经度</td>
-                        <td>float</td>
-                        <td>121.50389</td>
-                        <td>0.0</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>latitude</td>
-                        <td>参考中心的纬度</td>
-                        <td>float</td>
-                        <td>31.29665</td>
-                        <td>0.0</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleType (within dispatchZone)</td>
-                        <td>分区车型</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td>全用9.6米</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleTypeId</td>
-                        <td>车型编号</td>
-                        <td>string</td>
-                        <td>Type1</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleTypeDescr1</td>
-                        <td>车型名称</td>
-                        <td>string</td>
-                        <td>9.6米车型</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>loadCapacityMin</td>
-                        <td>最小载重</td>
-                        <td>float</td>
-                        <td>10.0</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>loadCapacity</td>
-                        <td>最大载重</td>
-                        <td>float</td>
-                        <td>16.0</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>capacity</td>
-                        <td>最大体积</td>
-                        <td>float</td>
-                        <td>40.0</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>temperatureType (within vehicleType)</td>
-                        <td>运输温控方式, 常温或冷藏</td>
-                        <td>string</td>
-                        <td>冷藏</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>vehicle</td>
-                        <td>分区车辆</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleId</td>
-                        <td>车辆标识符</td>
-                        <td>string</td>
-                        <td>VE0000000215</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>licensePlateNo</td>
-                        <td>车牌号</td>
-                        <td>string</td>
-                        <td>沪A88888</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleType (within vehicle)</td>
-                        <td>车型</td>
-                        <td>string</td>
-                        <td>Type1</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                     <tr>
-                        <td>tariff</td>
-                        <td>分区费率合同: 1个调度分区内限制1个有效合同, 按照最远距离价格最低排线; 如果是多个合同, 则需要多个合同之间继续比较, 选择价格最低的</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td></td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>tariffID</td>
-                        <td>费率合同ID</td>
-                        <td>string</td>
-                        <td>JLB-JT-202410-00098</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>offeringType (within tariff)</td>
-                        <td>运输方式</td>
-                        <td>string</td>
-                        <td>整车运输</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>shipperProvince</td>
-                        <td>始发地省份</td>
-                        <td>string</td>
-                        <td>河北</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>shipperCity</td>
-                        <td>始发地城市</td>
-                        <td>string</td>
-                        <td>石家庄</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>shipperDistrict</td>
-                        <td>始发地区县</td>
-                        <td>string</td>
-                        <td>鹿泉</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>consigneeProvince</td>
-                        <td>目的地省份</td>
-                        <td>string</td>
-                        <td>山东</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>consigneeCity</td>
-                        <td>目的地城市</td>
-                        <td>string</td>
-                        <td>济南</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>consigneeDistrict</td>
-                        <td>目的地区县</td>
-                        <td>string</td>
-                        <td>XX</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>temperatureType (within tariff)</td>
-                        <td>运输温控方式</td>
-                        <td>string</td>
-                        <td>冷藏</td>
-                        <td>常温</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>mileage</td>
-                        <td>结算公里数, -1表示不使用此字段</td>
-                        <td>float</td>
-                        <td>399.0</td>
-                        <td>-1</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>rateBase</td>
-                        <td>计费基准</td>
-                        <td>string</td>
-                        <td>吨公里</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>initialRate</td>
-                        <td>单价</td>
-                        <td>float</td>
-                        <td>0.650</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>orders</td>
-                        <td>订单表</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td></td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>dispatchZoneCode (within orders)</td>
-                        <td>分区编号</td>
-                        <td>string</td>
-                        <td>DISZONE001</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>taskNo</td>
-                        <td>任务单号</td>
-                        <td>string</td>
-                        <td>P0001-2</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>orderNo</td>
-                        <td>订单号</td>
-                        <td>string</td>
-                        <td>P0001</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>DC</td>
-                        <td>配送中心ID</td>
-                        <td>string</td>
-                        <td>WH01</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>createTime</td>
-                        <td>创建时间</td>
-                        <td>string</td>
-                        <td>2025-03-04 10:00:00</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>qty (within orders)</td>
-                        <td>货物数量</td>
-                        <td>string</td>
-                        <td>10</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>weight (within orders)</td>
-                        <td>货物重量</td>
-                        <td>float</td>
-                        <td>15.5</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>cubic (within orders)</td>
-                        <td>货物体积</td>
-                        <td>float</td>
-                        <td>42.7</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>routeNoNext</td>
-                        <td>下一线程路号, 同一线路号的尽量在一车</td>
-                        <td>string</td>
-                        <td>XXXX</td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>offeringType (within orders)</td>
-                        <td>运输方式</td>
-                        <td>float</td> <td>汽运</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>temperatureClass</td>
-                        <td>温控类型: 冷藏产品只能用冷藏车运输, 常温产品可以选择冷藏车或常温车</td>
-                        <td>float</td> <td>冷藏</td>
-                        <td>常温</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>addressNo</td>
-                        <td>地址编码</td>
-                        <td>float</td> <td>ADDR001</td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>address</td>
-                        <td>地点描述</td>
-                        <td>string</td>
-                        <td>上海市杨浦区邯郸路某某号</td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleCategory</td>
-                        <td>限制车型: 按照地址设置限制车型, 会存在多个限制车型</td>
-                        <td>string</td>
-                        <td>type1, type2</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>longitude (within orders)</td>
-                        <td>经度(东经为正,西经为负)</td>
-                        <td>string</td>
-                        <td>121.50389</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>latitude (within orders)</td>
-                        <td>纬度(北纬为正,南纬为负)</td>
-                        <td>string</td>
-                        <td>31.29665</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>consigneeId</td>
-                        <td>收货客户编码</td>
-                        <td>string</td>
-                        <td>A001</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>companyClass</td>
-                        <td>客户等级, "0点"或"8点"</td>
-                        <td>string</td>
-                        <td>0点</td>
-                        <td>0点</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>availableVehicleType</td>
-                        <td>可用车型: 存在多个, ""表示不限制车型</td>
-                        <td>string</td>
-                        <td>type1, type2</td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleCategoryCus</td>
-                        <td>限制车型: 按照客户设置限制车型, 会存在多个限制车型, 当地址和客户都设置了限制车型时, 需要同时满足, ""表示不限制车型</td>
-                        <td>string</td>
-                        <td>type1, type2</td>
-                        <td></td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>unloadingTimeWindow</td>
-                        <td>卸货时间窗口</td>
-                        <td>string</td>
-                        <td>8:00-12:00,14:00-18:00</td>
-                        <td>0:00-24:00</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>nonUnloadingTimeWindow</td>
-                        <td>非卸货时间窗口, ""表示没有非卸货时间窗口</td>
-                        <td>string</td>
-                        <td>12:00-14:00,18:00-24:00</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>leadTime</td>
-                        <td>运输时效: 多少小时内达到, 从订单创建时间当天的24:00开始计时, -1表示不使用此限制</td>
-                        <td>float</td>
-                        <td>36.0</td>
-                        <td>-1</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>SDD</td>
-                        <td>指定收货日期, 1到7分别代表周一到周日</td>
-                        <td>string</td>
-                        <td>1, 2, 3</td>
-                        <td>1,2,3,4,5,6,7</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>ordersDetails</td>
-                        <td>订单明细表</td>
-                        <td>array[object]</td>
-                        <td></td>
-                        <td></td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>taskNo (within ordersDetails)</td>
-                        <td>任务单号</td>
-                        <td>string</td>
-                        <td>P0001-2</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>taskLineNo</td>
-                        <td>任务单行号</td>
-                        <td>string</td>
-                        <td>1</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>sku</td>
-                        <td>SKU编码</td>
-                        <td>string</td>
-                        <td>210001</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>skuDescr1</td>
-                        <td>产品描述</td>
-                        <td>string</td>
-                        <td>老酸奶</td>
-                        <td>""</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>qty (within ordersDetails)</td>
-                        <td>总件数</td>
-                        <td>int</td>
-                        <td>2</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>weight (within ordersDetails)</td>
-                        <td>总重量(吨), -1表示需要通过累加grossWeight计算总重量</td>
-                        <td>float</td>
-                        <td>2.0</td>
-                        <td>-1</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>cubic (within ordersDetails)</td>
-                        <td>总体积(立方米), -1表示需要通过累加cube计算总体积</td>
-                        <td>float</td>
-                        <td>6.2</td>
-                        <td>-1</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>temperatureType (within ordersDetails)</td>
-                        <td>温控类型</td>
-                        <td>string</td>
-                        <td>冷藏</td>
-                        <td>常温</td>
-                        <td>否</td>
-                    </tr>
-                    <tr>
-                        <td>grossWeight</td>
-                        <td>毛重</td>
-                        <td>float</td>
-                        <td>1.0</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                    <tr>
-                        <td>cube</td>
-                        <td>体积</td>
-                        <td>float</td>
-                        <td>3.1</td>
-                        <td>无</td>
-                        <td>是</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 id="input-parameters">Input Parameters (Quick Start Example)</h2>
+            <details>
+                <summary>JSON Input Structure { ... }</summary>
+                <pre><code>
+{
+  <span class="json-key">"dispatchId"</span>: <span class="json-string">"DIS0001"</span>,
+  <span class="json-key">"config"</span>: <details open><summary>{ ... } (<span class="json-key">config</span>)</summary><pre><code>{
+  <span class="json-key">"DELIVERY_LOADING_SPEED"</span>: <span class="json-number">2.0</span>,
+  <span class="json-key">"DELIVERY_STAY_MINUTE"</span>: <span class="json-number">5</span>,
+  <span class="json-key">"ROS_VEHICLE_SPEED"</span>: <span class="json-number">50</span>,
+  <span class="json-key">"ROS_SPLIT_ORDER"</span>: <span class="json-string">"Y"</span>,
+  <span class="json-key">"ROS_NORMAL_TEMPERATURE_RATIO"</span>: <span class="json-number">0.90</span>
+}</code></pre></details>,
+  <span class="json-key">"depots"</span>: <details open><summary>[ ... ] (<span class="json-key">depots</span>)</summary><pre><code>[
+    <details open><summary>{ ... } (depot 1)</summary><pre><code>{
+      <span class="json-key">"branchId"</span>: <span class="json-string">"WH01"</span>,
+      <span class="json-key">"branchDescr"</span>: <span class="json-string">"张江物流中心"</span>,
+      <span class="json-key">"longitude"</span>: <span class="json-string">"121.50389"</span>,
+      <span class="json-key">"latitude"</span>: <span class="json-string">"31.29665"</span>,
+      <span class="json-key">"notes"</span>: <span class="json-string">"说明"</span>,
+      <span class="json-key">"branch_status"</span>: <span class="json-string">"0"</span>
+    }</code></pre></details>
+  ]</code></pre></details>,
+  <span class="json-key">"dispatchZone"</span>: <details open><summary>[ ... ] (<span class="json-key">dispatchZone</span>)</summary><pre><code>[
+    <details open><summary>{ ... } (dispatchZone 1)</summary><pre><code>{
+      <span class="json-key">"dispatchZoneCode"</span>: <span class="json-string">"DISZONE001"</span>,
+      <span class="json-key">"departureWave"</span>: <span class="json-string">"0:00-1:00,2:00-4:00"</span>,
+      <span class="json-key">"longitude"</span>: <span class="json-string">"121.50389"</span>,
+      <span class="json-key">"latitude"</span>: <span class="json-string">"31.29665"</span>,
+      <span class="json-key">"vehicleType"</span>: <details open><summary>[ ... ] (<span class="json-key">vehicleType</span>)</summary><pre><code>[
+        <details open><summary>{ ... } (vehicleType 1)</summary><pre><code>{
+          <span class="json-key">"vehicleTypeId"</span>: <span class="json-string">"Type1"</span>,
+          <span class="json-key">"vehicleTypeDescr1"</span>: <span class="json-string">"9.6米车型"</span>,
+          <span class="json-key">"loadCapacityMin"</span>: <span class="json-number">10.0</span>,
+          <span class="json-key">"LoadCapacity"</span>: <span class="json-number">16.0</span>,
+          <span class="json-key">"capacity"</span>: <span class="json-number">40.0</span>,
+          <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>
+        }</code></pre></details>
+      ]</code></pre></details>,
+      <span class="json-key">"vehicle"</span>: <details open><summary>[ ... ] (<span class="json-key">vehicle</span>)</summary><pre><code>[
+        <details open><summary>{ ... } (vehicle 1)</summary><pre><code>{
+          <span class="json-key">"vehicleId"</span>: <span class="json-string">"VE0000000215"</span>,
+          <span class="json-key">"LicensePlateNo"</span>: <span class="json-string">"沪A88888"</span>,
+          <span class="json-key">"vehicleType"</span>: <span class="json-string">"Type1"</span>,
+          <span class="json-key">"pri"</span>: <span class="json-number">1</span>,
+          <span class="json-key">"capacityLength"</span>: <span class="json-number">9.6</span>,
+          <span class="json-key">"capacityWidth"</span>: <span class="json-number">2.3</span>,
+          <span class="json-key">"capacityHeight"</span>: <span class="json-number">2.3</span>,
+          <span class="json-key">"maxVolume"</span>: <span class="json-number">40.0</span>,
+          <span class="json-key">"maxWeight"</span>: <span class="json-number">16.0</span>,
+          <span class="json-key">"maxQty"</span>: <span class="json-number">100</span>,
+          <span class="json-key">"maxMoney"</span>: <span class="json-number">100.0</span>,
+          <span class="json-key">"mileageCost"</span>: <span class="json-null">null</span>, <span class="json-comment">// Assuming null or to be filled, PDF shows empty</span>
+          <span class="json-key">"workingTime"</span>: <span class="json-string">"06:00-17:00"</span>,
+          <span class="json-key">"returnFlag"</span>: <span class="json-string">"0"</span>
+        }</code></pre></details>
+      ]</code></pre></details>,
+      <span class="json-key">"tariff"</span>: <details open><summary>[ ... ] (<span class="json-key">tariff</span>)</summary><pre><code>[
+        <details open><summary>{ ... } (tariff 1)</summary><pre><code>{
+          <span class="json-key">"tariffID"</span>: <span class="json-string">"JLB-JT-202410-00098"</span>,
+          <span class="json-key">"offeringType"</span>: <span class="json-string">"整车运输"</span>,
+          <span class="json-key">"shipperProvince"</span>: <span class="json-string">"河北"</span>,
+          <span class="json-key">"shipperCity"</span>: <span class="json-string">"石家庄"</span>,
+          <span class="json-key">"shipperDistrict"</span>: <span class="json-string">""</span>,
+          <span class="json-key">"consigneeProvince"</span>: <span class="json-string">"山东"</span>,
+          <span class="json-key">"consigneeCity"</span>: <span class="json-string">"济南"</span>,
+          <span class="json-key">"consigneeDistrict"</span>: <span class="json-string">""</span>,
+          <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>,
+          <span class="json-key">"mileage"</span>: <span class="json-number">399.0</span>,
+          <span class="json-key">"rateBase"</span>: <span class="json-string">"吨公里"</span>,
+          <span class="json-key">"initialRate"</span>: <span class="json-number">0.650</span>
+        }</code></pre></details>
+      ]</code></pre></details>
+    }</code></pre></details>
+  ]</code></pre></details>,
+  <span class="json-key">"orders"</span>: <details open><summary>[ ... ] (<span class="json-key">orders</span>)</summary><pre><code>[
+    <details open><summary>{ ... } (order 1)</summary><pre><code>{
+      <span class="json-key">"dispatchZoneCode"</span>: <span class="json-string">"DIS0001"</span>, <span class="json-comment">// Note: PDF example "DIS0001", likely should match a dispatchZoneCode like "DISZONE001"</span>
+      <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
+      <span class="json-key">"orderNo"</span>: <span class="json-string">"P0001"</span>,
+      <span class="json-key">"DC"</span>: <span class="json-string">"WH01"</span>,
+      <span class="json-key">"orderType"</span>: <span class="json-string">"D"</span>,
+      <span class="json-key">"createTime"</span>: <span class="json-string">"2025-03-04 10:00:00"</span>,
+      <span class="json-key">"qty"</span>: <span class="json-number">10</span>,
+      <span class="json-key">"weight"</span>: <span class="json-number">15.5</span>,
+      <span class="json-key">"cubic"</span>: <span class="json-number">42.7</span>,
+      <span class="json-key">"money"</span>: <span class="json-number">100.0</span>,
+      <span class="json-key">"bulkFlag"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"routeNo"</span>: <span class="json-string">""</span>,
+      <span class="json-key">"routeNoNext"</span>: <span class="json-string">""</span>,
+      <span class="json-key">"offeringType"</span>: <span class="json-string">"汽运"</span>,
+      <span class="json-key">"temperatureClass"</span>: <span class="json-string">"冷藏"</span>,
+      <span class="json-key">"addressNo"</span>: <span class="json-string">"ADDR001"</span>,
+      <span class="json-key">"address"</span>: <span class="json-string">"上海市杨浦区邯郸路某某号"</span>,
+      <span class="json-key">"timeWindowFrom"</span>: <span class="json-string">"00:00"</span>, <span class="json-comment">// PDF shows 00:00, assuming string</span>
+      <span class="json-key">"timeWindowTo"</span>: <span class="json-string">"23:59"</span>,   <span class="json-comment">// PDF shows 23:59, assuming string</span>
+      <span class="json-key">"vehicleCategory"</span>: <span class="json-string">"type1, type2"</span>,
+      <span class="json-key">"longitude"</span>: <span class="json-string">"121.50389"</span>,
+      <span class="json-key">"latitude"</span>: <span class="json-string">"31.29665"</span>,
+      <span class="json-key">"consigneeId"</span>: <span class="json-string">"A001"</span>,
+      <span class="json-key">"companyClass"</span>: <span class="json-string">"0点"</span>,
+      <span class="json-key">"availableVehicleType"</span>: <span class="json-string">"type1, type2"</span>,
+      <span class="json-key">"vehicleCategoryCus"</span>: <span class="json-string">"type1, type2"</span>,
+      <span class="json-key">"unloadingTimeWindow"</span>: <span class="json-string">"8:00-12:00, 14:00-18:00"</span>,
+      <span class="json-key">"nonUnloadingTimeWindow"</span>: <span class="json-string">"12:00-14:00,18:00-24:00"</span>,
+      <span class="json-key">"leadTime"</span>: <span class="json-number">36.0</span>,
+      <span class="json-key">"SDD"</span>: <span class="json-string">"1, 2, 3"</span>,
+      <span class="json-key">"ordersDetails"</span>: <details open><summary>[ ... ] (<span class="json-key">ordersDetails</span>)</summary><pre><code>[
+        <details open><summary>{ ... } (orderDetail 1)</summary><pre><code>{
+          <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
+          <span class="json-key">"taskLineNo"</span>: <span class="json-string">"1"</span>,
+          <span class="json-key">"sku"</span>: <span class="json-string">"210001"</span>,
+          <span class="json-key">"skuDescr1"</span>: <span class="json-string">"老酸奶"</span>,
+          <span class="json-key">"qty"</span>: <span class="json-number">2</span>,
+          <span class="json-key">"weight"</span>: <span class="json-number">2.0</span>,
+          <span class="json-key">"cubic"</span>: <span class="json-number">6.2</span>,
+          <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>,
+          <span class="json-key">"grossWeight"</span>: <span class="json-number">1.0</span>,
+          <span class="json-key">"cube"</span>: <span class="json-number">3.1</span>
+        }</code></pre></details>
+      ]</code></pre></details>
+    }</code></pre></details>
+  ]</code></pre></details>
+}
+                </code></pre>
+            </details>
 
-            <h2 id="output-parameters">Output Parameters</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>参数名</th>
-                        <th>含义</th>
-                        <th>类型</th>
-                        <th>举例</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>success</td>
-                        <td>是否运行成功</td>
-                        <td>boolean</td>
-                        <td>true</td>
-                    </tr>
-                    <tr>
-                        <td>code</td>
-                        <td>WIP状态码 10000:成功; 10001:数据不符合算法规则; 10002:无可行解; 10003:其他内部错误</td>
-                        <td>string</td>
-                        <td>10000</td>
-                    </tr>
-                    <tr>
-                        <td>msg</td>
-                        <td>成功或失败提示</td>
-                        <td>string</td>
-                        <td>运行成功</td>
-                    </tr>
-                    <tr>
-                        <td>results</td>
-                        <td>运行结果, 若报错则为 null</td>
-                        <td>array[object]</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>dispatchId</td>
-                        <td>调度记录ID</td>
-                        <td>string</td>
-                        <td>DIS0001</td>
-                    </tr>
-                    <tr>
-                        <td>waybillNo</td>
-                        <td>运单号, 算法生成</td>
-                        <td>string</td>
-                        <td>BIL001</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleId</td>
-                        <td>车辆标识符</td>
-                        <td>string</td>
-                        <td>VE0000000215</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleType</td>
-                        <td>车型编码</td>
-                        <td>string</td>
-                        <td>Type1</td>
-                    </tr>
-                    <tr>
-                        <td>temperatureType</td>
-                        <td>车辆的温控类型</td>
-                        <td>string</td>
-                        <td>冷藏</td>
-                    </tr>
-                    <tr>
-                        <td>ETD</td>
-                        <td>预计发运时间</td>
-                        <td>string</td>
-                        <td>2025-03-04 00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleLeaveSeq</td>
-                        <td>车辆出厂排序</td>
-                        <td>int</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>routeNoRos</td>
-                        <td>Ros线路号</td>
-                        <td>string</td>
-                        <td>R0001</td>
-                    </tr>
-                    <tr>
-                        <td>routeNameRos</td>
-                        <td>Ros线路名称</td>
-                        <td>string</td>
-                        <td>"石家庄-济南"</td>
-                    </tr>
-                    <tr>
-                        <td>totalMile</td>
-                        <td>总里程数</td>
-                        <td>float</td>
-                        <td>390.0</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleVolumeRatio</td>
-                        <td>体积装载率</td>
-                        <td>float</td>
-                        <td>0.69</td>
-                    </tr>
-                    <tr>
-                        <td>vehicleWeightRatio</td>
-                        <td>重量装载率</td>
-                        <td>float</td>
-                        <td>0.99</td>
-                    </tr>
-                    <tr>
-                        <td>orders (within results)</td>
-                        <td>运单中的订单信息</td>
-                        <td>array[object]</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>taskNo (within orders in results)</td>
-                        <td>任务号</td>
-                        <td>string</td>
-                        <td>P0001-2</td>
-                    </tr>
-                    <tr>
-                        <td>orderNo (within orders in results)</td>
-                        <td>订单号</td>
-                        <td>string</td>
-                        <td>P0001</td>
-                    </tr>
-                    <tr>
-                        <td>seq</td>
-                        <td>顺序号, 相同 customerId 顺序号相同</td>
-                        <td>int</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>eta</td>
-                        <td>预计到达时间</td>
-                        <td>string</td>
-                        <td>2025-03-04 10:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>etd</td>
-                        <td>预计离开时间</td>
-                        <td>string</td>
-                        <td>2025-03-04 10:20:00</td>
-                    </tr>
-                    <tr>
-                        <td>distance</td>
-                        <td>距离 (km)</td>
-                        <td>float</td>
-                        <td>16.0</td>
-                    </tr>
-                    <tr>
-                        <td>duration</td>
-                        <td>运输时长</td>
-                        <td>float</td>
-                        <td>0.36</td>
-                    </tr>
-                    <tr>
-                        <td>qty (within orders in results)</td>
-                        <td>数量: 下发给算法的原始数量</td>
-                        <td>int</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td>grossWeight (within orders in results)</td>
-                        <td>重量 (吨): 下发给算法的原始重量</td>
-                        <td>float</td>
-                        <td>15.5</td>
-                    </tr>
-                    <tr>
-                        <td>cubic (within orders in results)</td>
-                        <td>体积 (立方米): 下发给算法的原始体积</td>
-                        <td>float</td>
-                        <td>42.7</td>
-                    </tr>
-                    <tr>
-                        <td>qtyPlanned</td>
-                        <td>已配载数量: 算法拆分后, 当前计划配载的数量</td>
-                        <td>int</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td>grossWeightPlanned</td>
-                        <td>已配载重量 (吨): 算法拆分后, 当前计划配载的重量</td>
-                        <td>float</td>
-                        <td>15.5</td>
-                    </tr>
-                    <tr>
-                        <td>cubicPlanned</td>
-                        <td>已配载体积 (立方米): 算法拆分后, 当前计划配载的体积</td>
-                        <td>float</td>
-                        <td>42.7</td>
-                    </tr>
-                    <tr>
-                        <td>goods</td>
-                        <td>订单的SKU明细</td>
-                        <td>array[object]</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>taskNo (within goods)</td>
-                        <td>任务单号</td>
-                        <td>string</td>
-                        <td>P0001-2</td>
-                    </tr>
-                    <tr>
-                        <td>taskLineNo (within goods)</td>
-                        <td>原任务单行号</td>
-                        <td>string</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>sku (within goods)</td>
-                        <td>SKU</td>
-                        <td>string</td>
-                        <td>210001</td>
-                    </tr>
-                    <tr>
-                        <td>skuDescr1 (within goods)</td>
-                        <td>产品描述</td>
-                        <td>string</td>
-                        <td>老酸奶</td>
-                    </tr>
-                    <tr>
-                        <td>qty (within goods)</td>
-                        <td>数量: 原始数量</td>
-                        <td>int</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>grossweight (within goods)</td> <td>重量 (吨): 原始重量</td>
-                        <td>float</td>
-                        <td>2.0</td>
-                    </tr>
-                    <tr>
-                        <td>cubic (within goods)</td>
-                        <td>体积 (立方米): 原始体积</td>
-                        <td>float</td>
-                        <td>6.2</td>
-                    </tr>
-                    <tr>
-                        <td>qtyPlanned (within goods)</td>
-                        <td>已配载数量: 算法拆分后, 当前计划配载数量</td>
-                        <td>int</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>grossWeightPlanned (within goods)</td>
-                        <td>已配载重量 (吨): 算法拆分后, 当前计划配载数量</td>
-                        <td>float</td>
-                        <td>2.0</td>
-                    </tr>
-                    <tr>
-                        <td>cubicPlanned (within goods)</td>
-                        <td>已配载体积 (立方米): 算法拆分后, 当前计划配载数量</td>
-                        <td>float</td>
-                        <td>6.2</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 id="output-parameters">Output Parameters (Quick Start Example)</h2>
+            <details>
+                <summary>JSON Output Structure { ... }</summary>
+                <pre><code>
+{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"code"</span>: <span class="json-string">"10000"</span>,
+  <span class="json-key">"msg"</span>: <span class="json-string">"成功"</span>,
+  <span class="json-key">"results"</span>: <details open><summary>[ ... ] (<span class="json-key">results</span>)</summary><pre><code>[
+    <details open><summary>{ ... } (result 1)</summary><pre><code>{
+      <span class="json-key">"dispatchId"</span>: <span class="json-string">"DIS0001"</span>, <span class="json-comment">//调度编码</span>
+      <span class="json-key">"waybillNo"</span>: <span class="json-string">"BIL001"</span>, <span class="json-comment">//运单号,算法生成</span>
+      <span class="json-key">"vehicleId"</span>: <span class="json-string">"VE0000000215"</span>,
+      <span class="json-key">"vehicleType"</span>: <span class="json-string">"Type1"</span>,
+      <span class="json-key">"temperatureType"</span>: <span class="json-string">"冷藏"</span>,
+      <span class="json-key">"ETD"</span>: <span class="json-string">"2025-03-04 00:00:00"</span>,
+      <span class="json-key">"vehicleLeaveSeq"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"routeNoRos"</span>: <span class="json-string">"R0001"</span>,
+      <span class="json-key">"routeNameRos"</span>: <span class="json-string">"石家庄-济南-潍坊-青岛"</span>,
+      <span class="json-key">"totalMile"</span>: <span class="json-number">390.0</span>,
+      <span class="json-key">"vehicleVolumeRatio"</span>: <span class="json-number">0.69</span>,
+      <span class="json-key">"vehicleWeightRatio"</span>: <span class="json-number">0.99</span>,
+      <span class="json-key">"orders"</span>: <details open><summary>[ ... ] (<span class="json-key">orders</span>)</summary><pre><code>[
+        <details open><summary>{ ... } (order 1 in results)</summary><pre><code>{
+          <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
+          <span class="json-key">"orderNo"</span>: <span class="json-string">"P0001"</span>,
+          <span class="json-key">"seq"</span>: <span class="json-number">1</span>,
+          <span class="json-key">"eta"</span>: <span class="json-string">"2025-03-04 10:00:00"</span>,
+          <span class="json-key">"etd"</span>: <span class="json-string">"2025-03-04 10:20:00"</span>,
+          <span class="json-key">"distance"</span>: <span class="json-number">16.0</span>,
+          <span class="json-key">"duration"</span>: <span class="json-number">0.36</span>,
+          <span class="json-key">"qty"</span>: <span class="json-number">10</span>,
+          <span class="json-key">"grossWeight"</span>: <span class="json-number">15.5</span>,
+          <span class="json-key">"cubic"</span>: <span class="json-number">42.7</span>,
+          <span class="json-key">"qtyPlanned"</span>: <span class="json-number">5</span>,
+          <span class="json-key">"grossWeightPlanned"</span>: <span class="json-number">7.5</span>,
+          <span class="json-key">"cubicPlanned"</span>: <span class="json-number">21.3</span>,
+          <span class="json-key">"goods"</span>: <details open><summary>[ ... ] (<span class="json-key">goods</span>)</summary><pre><code>[
+            <details open><summary>{ ... } (good 1)</summary><pre><code>{
+              <span class="json-key">"taskNo"</span>: <span class="json-string">"P0001-2"</span>,
+              <span class="json-key">"taskLineNo"</span>: <span class="json-string">"1"</span>,
+              <span class="json-key">"sku"</span>: <span class="json-string">"210001"</span>,
+              <span class="json-key">"skuDescr1"</span>: <span class="json-string">"老酸奶"</span>,
+              <span class="json-key">"qty"</span>: <span class="json-number">2</span>,
+              <span class="json-key">"grossweight"</span>: <span class="json-number">2.0</span>, <span class="json-comment">// Note: "grossweight" not "grossWeight"</span>
+              <span class="json-key">"cubic"</span>: <span class="json-number">6.2</span>,
+              <span class="json-key">"qtyPlanned"</span>: <span class="json-number">2</span>,
+              <span class="json-key">"grossWeightPlanned"</span>: <span class="json-number">2.0</span>,
+              <span class="json-key">"cubicPlanned"</span>: <span class="json-number">6.2</span>
+            }</code></pre></details>
+          ]</code></pre></details>
+        }</code></pre></details>
+      ]</code></pre></details>
+    }</code></pre></details>
+  ]</code></pre></details>
+}
+                </code></pre>
+            </details>
         </main>
     </div>
+    <script>
+        // Basic script to make details/summary work if needed,
+        // but they should work natively in modern browsers.
+        // You can add more advanced JS for a richer UI if desired.
+    </script>
 </body>
 </html>
