@@ -12,22 +12,29 @@ body {
 .container {
     display: flex;
     min-height: 100vh;
+    /* 移除 Flexbox 对 sidebar 的影响，因为 sidebar 将使用 position: fixed */
 }
 
+/* 固定侧边栏 */
 .sidebar {
-    width: 290px; /* 保持您最新的侧边栏宽度 */
+    width: 290px; /* 保持您当前的侧边栏宽度 */
     background-color: #1a73e8;
     color: white;
     padding: 20px;
+    position: fixed; /* 固定定位 */
+    top: 0;
+    left: 0;
+    height: 100vh; /* 侧边栏占满整个视口高度 */
+    overflow-y: auto; /* 如果内容过长，允许垂直滚动 */
 }
 
 .sidebar h1 {
-    font-size: 22px; /* 保持您最新的 h1 大小 */
+    font-size: 22px;
     margin-bottom: 20px;
 }
 
 .sidebar h2 {
-    font-size: 18px; /* 保持您最新的 h2 大小 */
+    font-size: 18px;
     margin-bottom: 15px;
 }
 
@@ -43,8 +50,8 @@ body {
     color: white;
     text-decoration: none;
     font-size: 16px;
-    padding: 5px 0; /* 保持内边距 */
-    display: block; /* 确保链接占满容器宽度 */
+    padding: 5px 0;
+    display: block;
 }
 
 .sidebar a:hover {
@@ -54,6 +61,14 @@ body {
 main {
     flex-grow: 1;
     padding: 40px;
+    margin-left: 290px; /* 留出侧边栏的宽度，防止内容被遮挡 */
+}
+
+/* 确保 main 区域的最小宽度，避免内容过窄 */
+@media (min-width: 769px) {
+    main {
+        min-width: calc(100vw - 290px); /* 确保 main 区域占满剩余宽度 */
+    }
 }
 
 main h1 {
@@ -84,37 +99,45 @@ main a:hover {
 /* 表格样式 */
 table {
     width: 100%;
-    border-collapse: collapse; /* 合并边框 */
+    border-collapse: collapse;
     margin-bottom: 20px;
-    background-color: #ffffff; /* 白色背景 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
-    border: 1px solid #ddd; /* 添加表格外边框 */
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
-    padding: 12px 15px; /* 保持内边距 */
-    text-align: left; /* 左对齐 */
-    border: 1px solid #ddd; /* 为单元格添加完整边框 */
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #bbb;
 }
 
 th {
-    background-color: #f8f9fa; /* 表头背景色 */
-    font-weight: bold; /* 表头加粗 */
-    color: #333; /* 深灰色文字 */
+    background-color: #e9ecef;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #ccc;
 }
 
 td {
-    color: #555; /* 单元格文字颜色 */
+    color: #555;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 tr:hover {
-    background-color: #f1f3f5; /* 悬停时高亮背景 */
+    background-color: #f1f3f5;
 }
 
 /* 确保 MathJax 公式与表格协调 */
 .MathJax {
-    font-size: 1.1em; /* 公式字体大小 */
-    vertical-align: middle; /* 公式垂直居中 */
+    font-size: 1.1em;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 /* 响应式设计 */
@@ -123,31 +146,37 @@ tr:hover {
         flex-direction: column;
     }
     .sidebar {
-        width: 100%; /* 小屏幕下全宽 */
+        position: static; /* 小屏幕下取消固定定位 */
+        width: 100%; /* 恢复全宽 */
+        height: auto; /* 高度自适应 */
+    }
+    main {
+        margin-left: 0; /* 小屏幕下移除左侧偏移 */
+        padding: 20px; /* 减小内边距 */
     }
     table {
-        font-size: 14px; /* 小屏幕下减小字体 */
+        font-size: 14px;
     }
     th, td {
-        padding: 8px 10px; /* 小屏幕下减小内边距 */
-        border: 1px solid #ddd; /* 保持边框 */
+        padding: 8px 10px;
+        border: 1px solid #bbb;
     }
 }
 
 /* 子菜单样式 */
 .submenu {
-    margin-left: 20px; /* 子菜单缩进 20px */
-    display: none; /* 默认隐藏，修正原始代码 */
+    margin-left: 20px;
+    display: none; /* 默认隐藏 */
 }
 
 .submenu li {
-    margin: 10px 0; /* 子菜单项间距稍小 */
+    margin: 10px 0;
 }
 
 .submenu a {
-    font-size: 14px; /* 子菜单链接字体稍小 */
+    font-size: 14px;
 }
 
 .submenu.active {
-    display: block; /* 点击父项后显示 */
+    display: block;
 }
