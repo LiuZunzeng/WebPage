@@ -229,7 +229,7 @@
             <ol>
                 <li>对整车子订单（子订单的总重量或总体积接近车辆容量上限）进行独立路径规划，以降低 pyvrp 的求解复杂度。具体实现细节请参阅 <code>entireVehiclePlanning.py</code> 文件。</li>
                 <li>通过修改 pyvrp 源代码，引入多维度容量约束，支持同时考虑订单的体积和重量限制，以优化车辆分配效率。具体实现细节请参阅 <code>pyvrp_modified-1.0.0-py3-none-any.whl</code> 文件。</li>
-                <li>在调用 pyvrp 之前，预先验证所有订单在时间维度上的可行性，剔除不可行订单，以避免 pyvrp 处理无效算例。具体实现细节请参阅 <code>vrpSolver.py</code> 文件。</li>
+                <li>在调用 pyvrp 之前，预先验证所有订单在时间维度上的可行性，剔除不可行订单，以避免 pyvrp 处理无效算例。具体实现细节请参阅 <code>vrpSolver.py</code>。</li>
             </ol>
 
             <h1 id="io-interface">Input/Output Interface</h1>
