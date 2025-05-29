@@ -6,12 +6,15 @@
     <title>Trunkline Transportation Optimization For JunLeBao</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/uh2aQd1dFgdH+3nkkvh6Fw2gLD2o6thbKns2NPrfZQa7PEPWzSnSrbQeK1N1M4Sw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js" integrity="sha512-rN4lE2qW2O4S9T9vI7n4g3Jvi6e6hT7KCrkS1dJghk2mK50cRiWnE3vK0EVB78W4zC2bH4W8vMBv6H7N1LN+VQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-w5eXR5D1A0N98ehDM3vDR3r5lAKW3qV+dgk6o9dzCYsKkC5s0x2F+sa5JKeS/fS47LWVFpCY3sZfM0F14iX7KXw==" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <!-- 内联样式（不变） -->
     <style>
-        /* Styles for collapsible JSON */
         details {
             border: 1px solid #aaa;
             border-radius: 4px;
@@ -32,23 +35,19 @@
             margin-bottom: 0.5em;
         }
         pre {
-            white-space: pre-wrap; /* Allows wrapping of long lines */
-            word-wrap: break-word; /* Breaks long words if necessary */
+            white-space: pre-wrap;
+            word-wrap: break-word;
             background-color: #f4f4f4;
             padding: 1em;
             border-radius: 4px;
-            overflow-x: auto; /* Adds horizontal scroll for very long non-breaking lines */
+            overflow-x: auto;
         }
-        .json-key { color: #a52a2a; /* brown */ }
-        .json-string { color: #008000; /* green */ }
-        .json-number { color: #0000ff; /* blue */ }
-        .json-boolean { color: #ff00ff; /* magenta */ }
-        .json-null { color: #808080; /* gray */ }
+        .json-key { color: #a52a2a; }
+        .json-string { color: #008000; }
+        .json-number { color: #0000ff; }
+        .json-boolean { color: #ff00ff; }
+        .json-null { color: #808080; }
     </style>
-    <!-- 添加Prism.js行号插件 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -198,29 +197,29 @@
             输入：订单数据（包含订单编号、重量、体积、SKU详情等）
             输出：符合车辆限制的子订单集合
 
-            1:  初始化：创建空的子订单集合
-            2:  对每个订单进行处理：
-            3:      获取订单可用的最大车辆载重和容积
-            4:      如果订单重量和体积在车辆限制内：
-            5:          将订单标记为零散订单，保留原数据
-            6:          添加到子订单集合
-            7:          跳到下一个订单
-            8:      将SKU分为常温和低温两组，优先常温
-            9:      将SKU分为超大（超出车辆限制）和普通两类
-            10:     初始化一个空子订单
-            11:     对每个超大SKU：
-            12:         创建背包，逐件放入，直至超出车辆限制
-            13:         每满一个背包，保存为非零散子订单
-            14:         最后未满的背包保存为零散子订单
-            15:         将所有背包转为子订单，添加到集合
-            16:     对每个普通SKU：
-            17:         如果当前子订单能装下：
-            18:             添加SKU到当前子订单
-            19:         否则：
-            20:             保存当前子订单为非零散
-            21:             创建新子订单，放入SKU
-            22:     如果当前子订单有物品：
-            23:         保存为零散子订单
+            1: 初始化：创建空的子订单集合
+            2: 对每个订单进行处理：
+            3:     获取订单可用的最大车辆载重和容积
+            4:     如果订单重量和体积在车辆限制内：
+            5:         将订单标记为零散订单，保留原数据
+            6:         添加到子订单集合
+            7:         跳到下一个订单
+            8:     将SKU分为常温和低温两组，优先常温
+            9:     将SKU分为超大（超出车辆限制）和普通两类
+            10:    初始化一个空子订单
+            11:    对每个超大SKU：
+            12:        创建背包，逐件放入，直至超出车辆限制
+            13:        每满一个背包，保存为非零散子订单
+            14:        最后未满的背包保存为零散子订单
+            15:        将所有背包转为子订单，添加到集合
+            16:    对每个普通SKU：
+            17:        如果当前子订单能装下：
+            18:            添加SKU到当前子订单
+            19:        否则：
+            20:            保存当前子订单为非零散
+            21:            创建新子订单，放入SKU
+            22:    如果当前子订单有物品：
+            23:        保存为零散子订单
             24: 返回子订单集合
                 </code></pre>
             </div>

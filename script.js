@@ -1,16 +1,23 @@
-// 合并的DOMContentLoaded事件监听器
 document.addEventListener('DOMContentLoaded', function() {
-    // 自定义Prism.js高亮规则
+    // 定义伪代码的 Prism.js 自定义语言
     Prism.languages.pseudo = {
-        'keyword': /\b(算法|输入|输出|如果|否则|对每个|初始化|返回)\b/,
+        'keyword': /\b(算法|输入|输出|如果|否则|对每个|初始化|返回|创建|保存|跳到|直至)\b/,
         'string': /“[^”]+”/,
         'comment': /\/\/.*$/
     };
 
-    // 确保Prism.js高亮应用
-    Prism.highlightAll();
+    // 显式高亮伪代码块
+    try {
+        Prism.highlightAll();
+        // 针对伪代码块单独重新高亮
+        document.querySelectorAll('code.language-pseudo').forEach(block => {
+            Prism.highlightElement(block);
+        });
+    } catch (error) {
+        console.error('Prism.js 高亮失败:', error);
+    }
 
-    // 搜索功能
+    // 搜索功能（不变）
     document.getElementById('search').addEventListener('input', function(e) {
         const searchText = e.target.value.toLowerCase();
         const links = document.querySelectorAll('.sidebar a');
@@ -20,23 +27,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 子菜单切换功能
+    // 子菜单切换（不变）
     document.querySelectorAll('.toggle').forEach(toggle => {
         toggle.addEventListener('click', function(e) {
-            e.preventDefault(); // 阻止默认锚点跳转
-            const submenu = this.nextElementSibling; // 获取子菜单
-            submenu.classList.toggle('active'); // 切换 active 类
+            e.preventDefault();
+            const submenu = this.nextElementSibling;
+            submenu.classList.toggle('active');
             submenu.style.display = submenu.classList.contains('active') ? 'block' : 'none';
         });
     });
 
-    // 默认展开子菜单
+    // 默认展开子菜单（不变）
     document.querySelectorAll('.submenu').forEach(submenu => {
         submenu.classList.add('active');
         submenu.style.display = 'block';
     });
 
-    // JSON内容折叠功能
+    // JSON 折叠功能（不变）
     const toggleButtons = document.querySelectorAll('.toggle-btn');
     toggleButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -56,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 全局展开/收缩按钮
+    // 全局展开/收缩按钮（不变）
     const toggleAllBtn = document.createElement('button');
     toggleAllBtn.textContent = '全部展开/收缩';
     toggleAllBtn.style.marginBottom = '1em';
@@ -85,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 将全局按钮插入到第一个JSON容器之前
     const firstJsonContainer = document.querySelector('.json-container');
     firstJsonContainer.parentNode.insertBefore(toggleAllBtn, firstJsonContainer);
 });
