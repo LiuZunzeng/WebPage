@@ -17,7 +17,7 @@ body {
 
 /* 固定侧边栏 */
 .sidebar {
-    width: 290px; /* 保持您当前的侧边栏宽度 */
+    width: 260px; /* 保持您当前的侧边栏宽度 */
     background-color: #1a73e8;
     color: white;
     padding: 20px;
@@ -34,7 +34,7 @@ body {
 }
 
 .sidebar h2 {
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 15px;
 }
 
