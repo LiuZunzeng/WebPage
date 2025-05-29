@@ -15,19 +15,19 @@ body {
 }
 
 .sidebar {
-    width: 290px;
+    width: 290px; /* 保持您最新的侧边栏宽度 */
     background-color: #1a73e8;
     color: white;
     padding: 20px;
 }
 
 .sidebar h1 {
-    font-size: 22px;
+    font-size: 22px; /* 保持您最新的 h1 大小 */
     margin-bottom: 20px;
 }
 
 .sidebar h2 {
-    font-size: 18px;
+    font-size: 18px; /* 保持您最新的 h2 大小 */
     margin-bottom: 15px;
 }
 
@@ -43,6 +43,8 @@ body {
     color: white;
     text-decoration: none;
     font-size: 16px;
+    padding: 5px 0; /* 保持内边距 */
+    display: block; /* 确保链接占满容器宽度 */
 }
 
 .sidebar a:hover {
@@ -86,12 +88,13 @@ table {
     margin-bottom: 20px;
     background-color: #ffffff; /* 白色背景 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+    border: 1px solid #ddd; /* 添加表格外边框 */
 }
 
 th, td {
-    padding: 12px 15px; /* 增加内边距 */
+    padding: 12px 15px; /* 保持内边距 */
     text-align: left; /* 左对齐 */
-    border-bottom: 1px solid #ddd; /* 柔和的底边框 */
+    border: 1px solid #ddd; /* 为单元格添加完整边框 */
 }
 
 th {
@@ -120,14 +123,21 @@ tr:hover {
         flex-direction: column;
     }
     .sidebar {
-        width: 100%;
+        width: 100%; /* 小屏幕下全宽 */
+    }
+    table {
+        font-size: 14px; /* 小屏幕下减小字体 */
+    }
+    th, td {
+        padding: 8px 10px; /* 小屏幕下减小内边距 */
+        border: 1px solid #ddd; /* 保持边框 */
     }
 }
 
 /* 子菜单样式 */
 .submenu {
     margin-left: 20px; /* 子菜单缩进 20px */
-    display: block; /* 默认隐藏 */
+    display: none; /* 默认隐藏，修正原始代码 */
 }
 
 .submenu li {
@@ -138,7 +148,6 @@ tr:hover {
     font-size: 14px; /* 子菜单链接字体稍小 */
 }
 
-/* 子菜单显示时的样式 */
 .submenu.active {
     display: block; /* 点击父项后显示 */
 }
