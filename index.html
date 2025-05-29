@@ -44,7 +44,72 @@
         .json-number { color: #0000ff; /* blue */ }
         .json-boolean { color: #ff00ff; /* magenta */ }
         .json-null { color: #808080; /* gray */ }
+        /* 优化伪代码样式 */
+        .pseudo-code-container {
+            background-color: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Source Code Pro', monospace;
+            overflow-x: auto;
+        }
+
+        /* 行号样式 */
+        pre.line-numbers {
+            position: relative;
+            padding-left: 3.8em;
+            counter-reset: linenumber;
+        }
+
+        pre.line-numbers > code {
+            position: relative;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .line-numbers .line-numbers-rows {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 3em;
+            border-right: 1px solid #e1e4e8;
+            background-color: #f1f3f5;
+            padding: 16px 0;
+            user-select: none;
+        }
+
+        .line-numbers-rows > span {
+            display: block;
+            counter-increment: linenumber;
+        }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #6a737d;
+            display: block;
+            text-align: right;
+            padding-right: 1em;
+        }
+
+        /* 高亮伪代码中的关键字 */
+        .language-pseudo .keyword {
+            color: #d73a49; /* 红色关键字，如“算法”“如果” */
+        }
+
+        .language-pseudo .comment {
+            color: #6a737d; /* 灰色注释 */
+            font-style: italic;
+        }
+
+        .language-pseudo .string {
+            color: #032f62; /* 深蓝色字符串，如“订单{订单编号}” */
+        }
     </style>
+    <!-- 添加Prism.js行号插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
 </head>
 
 <body>

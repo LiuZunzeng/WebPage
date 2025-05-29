@@ -80,3 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const firstJsonContainer = document.querySelector('.json-container');
     firstJsonContainer.parentNode.insertBefore(toggleAllBtn, firstJsonContainer);
 });
+
+// 自定义Prism.js高亮规则
+Prism.languages.pseudo = {
+    'keyword': /\b(算法|输入|输出|如果|否则|对每个|初始化|返回)\b/,
+    'string': /“[^”]+”/,
+    'comment': /\/\/.*$/
+};
+
+// 确保页面加载后应用行号
+document.addEventListener('DOMContentLoaded', function() {
+    Prism.highlightAll();
+});
