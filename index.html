@@ -152,10 +152,10 @@
 
             <h2 id="constraints">Constraints</h2>
             <ul>
-                <li>每辆车都必须从仓库出发：<br>\[
+                <li>被选中的每辆车都必须从仓库出发：<br>\[
                 \sum_{j \in D} x_{0jk} = z_k, \quad \forall k \in V
                 \]</li>
-                <li>每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 \(d_{ij}\) 设置为 0 即可）：<br>\[
+                <li>被选中的每辆车最后必须返回仓库（若不考虑回程，只需把所有回程的距离 \(d_{ij}\) 设置为 0 即可）：<br>\[
                 \sum_{i \in D} x_{i,n+1,k} = z_k, \quad \forall k \in V
                 \]</li>
                 <li>中间节点的进出平衡约束：<br>\[
