@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 默认展开子菜单
     document.querySelectorAll('.submenu').forEach(submenu => {
         submenu.classList.add('active');
-        submenu.style.display = 'block';
+        submenu.style.display = 'none';
     });
 
     // JSON内容折叠功能
