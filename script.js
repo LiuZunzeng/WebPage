@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 默认展开子菜单
+    // 子菜单默认收起
     document.querySelectorAll('.submenu').forEach(submenu => {
-        submenu.classList.add('active');
-        submenu.style.display = 'none';
+        submenu.classList.remove('active'); // 移除 active 类
+        submenu.style.display = 'none'; // 设置为隐藏
     });
 
     // JSON内容折叠功能
